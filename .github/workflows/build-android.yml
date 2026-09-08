@@ -56,8 +56,35 @@ jobs:
           echo "RGBTV_KEY_ALIAS=${{ secrets.RGBTV_KEY_ALIAS }}" >> "$GITHUB_ENV"
           echo "RGBTV_KEY_PASS=${{ secrets.RGBTV_KEY_PASS }}" >> "$GITHUB_ENV"
 
+      - name: Gradle probe
+        run: |
+          chmod +x gradlew
+          ./gradlew --version 2>&1 | tee gradle-probe.log
+          test ${PIPESTATUS[0]} -eq 0
+
+      - name: Resolve dependencies
+        run: |
+          ./gradlew :app:dependencies --configuration releaseRuntimeClasspath -q > gradle-deps.log 2>&1
+          code=$?
+          echo "EXIT=$code" >> gradle-deps.log
+          tail -n 30 gradle-deps.log
+          exit $code
+
       - name: Build release APK
-        run: chmod +x gradlew && ./gradlew :app:assembleRelease --stacktrace
+        run: |
+          ./gradlew :app:assembleRelease --stacktrace > gradle-build.log 2>&1
+          code=$?
+          echo "EXIT=$code" >> gradle-build.log
+          tail -n 60 gradle-build.log
+          exit $code
+
+      - name: Upload gradle logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-logs
+          path: native/gradle-*.log
+          if-no-files-found: warn
 
       - name: Collect APK
         run: |
