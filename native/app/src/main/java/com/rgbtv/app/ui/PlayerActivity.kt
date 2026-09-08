@@ -274,9 +274,12 @@ class PlayerActivity : AppCompatActivity() {
         b.btnRetry.requestFocus()
     }
 
+    @Volatile private var pendingRestart = false
+
     private fun startPlayback() {
-        if (resolving) return
+        if (resolving) { pendingRestart = true; return }
         resolving = true
+        pendingRestart = false
         cancelCountdown()
         showLoading(getString(R.string.loading))
         lifecycleScope.launch {

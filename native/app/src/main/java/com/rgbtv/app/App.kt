@@ -3,6 +3,7 @@ package com.rgbtv.app
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+import com.rgbtv.app.data.DiskCacheInit
 import com.rgbtv.app.data.Store
 import com.rgbtv.app.img.Images
 

@@ -123,17 +123,20 @@ data class VodItem(
 data class SeriesItem(
     val id: String, val name: String, val poster: String = "", val catId: String = "",
     val rating: String = "", val year: String = "", val plot: String = "",
-    val genre: String = "", val cast: String = "", val backdrop: String = "", val added: Long = 0
+    val genre: String = "", val cast: String = "", val backdrop: String = "", val added: Long = 0,
+    val cmd: String = "", val seriesNums: String = ""
 ) {
     fun toJson(): JSONObject = JSONObject().put("type", "series").put("id", id).put("name", name)
         .put("poster", poster).put("catId", catId).put("rating", rating).put("year", year)
         .put("plot", plot).put("genre", genre).put("cast", cast)
         .put("backdrop", backdrop).put("added", added)
+        .put("cmd", cmd).put("seriesNums", seriesNums)
     companion object {
         fun fromJson(o: JSONObject) = SeriesItem(
             o.optString("id"), o.optString("name"), o.optString("poster"), o.optString("catId"),
             o.optString("rating"), o.optString("year"), o.optString("plot"),
-            o.optString("genre"), o.optString("cast"), o.optString("backdrop"), o.optLong("added")
+            o.optString("genre"), o.optString("cast"), o.optString("backdrop"), o.optLong("added"),
+            o.optString("cmd"), o.optString("seriesNums")
         )
     }
 }
