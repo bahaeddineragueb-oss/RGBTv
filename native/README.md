@@ -5,7 +5,7 @@
 
 ## البناء محلياً (Windows / Linux / macOS)
 
-1. ثبّت **JDK 17** و **Android SDK** (platform 35 + build-tools 35).
+1. ثبّت **JDK 17** و **Android SDK** (platform 36 + build-tools 36).
 2. عرّف `ANDROID_HOME` (أو ضع `sdk.dir=...` في `native/local.properties`).
 3. من مجلد `native/`:
    - Linux/macOS: `./gradlew :app:assembleRelease`
@@ -51,4 +51,4 @@ app/src/main/java/com/rgbtv/app/
 
 - نفس `applicationId` للنسخة القديمة (`com.rgbtv.app`) — احذف القديمة قبل تثبيت الجديدة
   (التوقيع مختلف).
-- `minSdk 24` (Android 7.0+) · `targetSdk 35` · Kotlin 2.0 · Media3 1.11 · AGP 8.8.
+- `minSdk 24` (Android 7.0+) · `targetSdk 35` · `compileSdk 36` · Kotlin 2.2 · Media3 1.11 · AGP 8.12 · Gradle 8.13.

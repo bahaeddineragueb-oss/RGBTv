@@ -56,49 +56,24 @@ jobs:
           echo "RGBTV_KEY_ALIAS=${{ secrets.RGBTV_KEY_ALIAS }}" >> "$GITHUB_ENV"
           echo "RGBTV_KEY_PASS=${{ secrets.RGBTV_KEY_PASS }}" >> "$GITHUB_ENV"
 
-      - name: Gradle probe
-        run: |
-          chmod +x gradlew
-          ./gradlew --version 2>&1 | tee gradle-probe.log
-          test ${PIPESTATUS[0]} -eq 0
-
-      - name: Resolve dependencies
-        run: |
-          ./gradlew :app:dependencies --configuration releaseRuntimeClasspath -q > gradle-deps.log 2>&1
-          code=$?
-          echo "EXIT=$code" >> gradle-deps.log
-          tail -n 30 gradle-deps.log
-          exit $code
-
       - name: Build release APK
         run: |
-          ./gradlew :app:assembleRelease --stacktrace > gradle-build.log 2>&1
-          code=$?
-          echo "EXIT=$code" >> gradle-build.log
-          tail -n 60 gradle-build.log
-          exit $code
-
-      - name: Upload gradle logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: gradle-logs
-          path: native/gradle-*.log
-          if-no-files-found: warn
-
-      - name: Commit gradle logs (diagnostic)
-        if: always()
-        run: |
-          git config user.name "ci-log-bot"
-          git config user.email "ci-log-bot@users.noreply.github.com"
-          git add -f gradle-probe.log gradle-deps.log gradle-build.log
-          git commit -m "[skip ci] gradle logs run $GITHUB_RUN_ID" || echo "nothing to commit"
-          git push origin HEAD:arena/01a08076-rgbtv
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --stacktrace
 
       - name: Collect APK
         run: |
           cp app/build/outputs/apk/release/app-release.apk RGBTv-native-3.0.0.apk
           ls -lh RGBTv-native-3.0.0.apk
+
+      - name: Verify APK
+        run: |
+          AAPT=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt | sort -V | tail -1)
+          echo "aapt: $AAPT"
+          "$AAPT" dump badging RGBTv-native-3.0.0.apk | grep -E "package:|sdkVersion|targetSdkVersion|application-label:"
+          "$AAPT" dump badging RGBTv-native-3.0.0.apk | grep -q "package: name='com.rgbtv.app'"
+          "$(dirname "$AAPT")/apksigner" verify RGBTv-native-3.0.0.apk && echo "signature OK"
+          test $(stat -c%s RGBTv-native-3.0.0.apk) -gt 1000000 && echo "size OK"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
