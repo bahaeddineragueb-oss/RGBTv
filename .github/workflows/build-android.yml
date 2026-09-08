@@ -86,6 +86,15 @@ jobs:
           path: native/gradle-*.log
           if-no-files-found: warn
 
+      - name: Commit gradle logs (diagnostic)
+        if: always()
+        run: |
+          git config user.name "ci-log-bot"
+          git config user.email "ci-log-bot@users.noreply.github.com"
+          git add -f gradle-probe.log gradle-deps.log gradle-build.log
+          git commit -m "[skip ci] gradle logs run $GITHUB_RUN_ID" || echo "nothing to commit"
+          git push origin HEAD:arena/01a08076-rgbtv
+
       - name: Collect APK
         run: |
           cp app/build/outputs/apk/release/app-release.apk RGBTv-native-3.0.0.apk
