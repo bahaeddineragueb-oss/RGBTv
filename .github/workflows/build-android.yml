@@ -43,7 +43,7 @@ jobs:
           if [ ! -x "$SDKM" ]; then SDKM=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1); fi
           echo "sdkmanager: $SDKM"
           yes | "$SDKM" --licenses > /dev/null 2>&1 || true
-          "$SDKM" "platforms;android-35" "build-tools;35.0.0" || true
+          "$SDKM" "platforms;android-36" "build-tools;36.0.0" "platforms;android-35" "build-tools;35.0.0" || true
 
       - name: Decode release keystore (optional)
         env:
