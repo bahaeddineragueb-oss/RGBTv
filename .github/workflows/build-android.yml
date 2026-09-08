@@ -46,10 +46,10 @@ jobs:
           "$SDKM" "platforms;android-35" "build-tools;35.0.0" || true
 
       - name: Decode release keystore (optional)
-        if: ${{ secrets.RGBTV_KEYSTORE_BASE64 != '' }}
         env:
           RGBTV_KEYSTORE_BASE64: ${{ secrets.RGBTV_KEYSTORE_BASE64 }}
         run: |
+          if [ -z "$RGBTV_KEYSTORE_BASE64" ]; then echo "No release keystore secret — using debug signing."; exit 0; fi
           echo "$RGBTV_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
           echo "RGBTV_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
           echo "RGBTV_KEYSTORE_PASS=${{ secrets.RGBTV_KEYSTORE_PASS }}" >> "$GITHUB_ENV"
