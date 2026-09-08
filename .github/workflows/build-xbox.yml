@@ -1,0 +1,63 @@
+# Builds the RGBTv Xbox package (.msix, Release x64, test-signed) on a free GitHub-hosted Windows runner.
+# No Visual Studio needed on your PC: push this repo → Actions → "Build Xbox package" → download the artifact.
+name: Build Xbox package
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync web app into the Xbox project
+        run: node xbox/sync.js
+
+      - name: Pick the newest installed Windows SDK
+        id: sdk
+        shell: pwsh
+        run: |
+          $kits = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\Include' -Directory | Where-Object { $_.Name -match '^10\.0\.(\d+)\.0$' -and [int]$Matches[1] -ge 22000 } | Sort-Object Name -Descending
+          if (-not $kits) { throw 'No Windows 11 SDK found on the runner' }
+          $v = $kits[0].Name
+          Write-Host "Using Windows SDK $v"
+          "version=$v" >> $env:GITHUB_OUTPUT
+
+      - name: Create test-signing certificate
+        shell: pwsh
+        run: |
+          $c = New-SelfSignedCertificate -Type Custom -Subject 'CN=RGBTv' -KeyUsage DigitalSignature -FriendlyName 'RGBTv Test' -CertStoreLocation 'Cert:\CurrentUser\My' -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3','2.5.29.19={text}')
+          $p = ConvertTo-SecureString -String 'rgbtv' -Force -AsPlainText
+          Export-PfxCertificate -Cert $c -FilePath 'xbox\RGBTv.Xbox\RGBTv_Test.pfx' -Password $p | Out-Null
+          Export-Certificate -Cert $c -FilePath 'xbox\RGBTv_Test.cer' | Out-Null
+
+      - uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: msbuild xbox\RGBTv.Xbox.sln /t:Restore /p:Configuration=Release /p:Platform=x64 /p:TargetPlatformVersion=${{ steps.sdk.outputs.version }}
+
+      - name: Build + package (.msix)
+        run: >
+          msbuild xbox\RGBTv.Xbox.sln /p:Configuration=Release /p:Platform=x64
+          /p:TargetPlatformVersion=${{ steps.sdk.outputs.version }}
+          /p:AppxBundle=Never /p:UapAppxPackageBuildMode=SideloadOnly
+          /p:UseDotNetNativeToolchain=false
+          /p:AppxPackageSigningEnabled=true /p:PackageCertificateKeyFile=RGBTv_Test.pfx /p:PackageCertificatePassword=rgbtv
+          /p:AppxPackageDir="${{ github.workspace }}\xbox\release\" /m /v:m
+
+      - name: Collect output
+        shell: pwsh
+        run: |
+          Copy-Item xbox\RGBTv_Test.cer xbox\release\
+          Copy-Item xbox\README.md xbox\release\
+          Get-ChildItem -Recurse xbox\release | Where-Object { $_.Extension -in '.msix','.appx','.cer' } | ForEach-Object { Write-Host $_.FullName }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RGBTv-Xbox-msix
+          path: xbox/release/
+          if-no-files-found: error
