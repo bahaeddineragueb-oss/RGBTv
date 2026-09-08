@@ -1,0 +1,19 @@
+# build outputs
+dist/
+android/build/
+android/RGBTv.apk
+android/RGBTv.apk.idsig
+android/debug.pk8
+android/debug.crt
+desktop/node_modules/
+desktop/www/
+desktop/release/
+xbox/RGBTv.Xbox/www/
+xbox/RGBTv.Xbox/bin/
+xbox/RGBTv.Xbox/obj/
+xbox/RGBTv.Xbox/*.pfx
+xbox/release/
+tools/shots/
+__pycache__/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,7 @@
+{
+  "id": "com.rgbtv.app.service",
+  "description": "RGBTv helper service: HTTP proxy for Stalker portals (custom headers) and playlist download",
+  "services": [
+    { "name": "com.rgbtv.app.service", "description": "RGBTv proxy service" }
+  ]
+}

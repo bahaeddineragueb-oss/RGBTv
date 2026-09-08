@@ -1,0 +1,7 @@
+{
+  "name": "com.rgbtv.app.service",
+  "version": "1.0.0",
+  "description": "RGBTv helper service",
+  "main": "service.js",
+  "engines": { "node": ">=0.12" }
+}

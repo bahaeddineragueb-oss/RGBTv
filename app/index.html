@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>RGBTv</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="dark">
+<div id="app">
+
+<!-- ================= SPLASH ================= -->
+<div id="screen-splash" class="screen active">
+  <div class="splash-center">
+    <div class="logo big"><span class="bar r"></span><span class="bar g"></span><span class="bar b"></span></div>
+    <h1 class="brand">RGB<span>Tv</span></h1>
+    <div class="loader"></div>
+    <p id="splash-status" class="muted">Starting…</p>
+  </div>
+</div>
+
+<!-- ================= PROFILES (Who's watching?) ================= -->
+<div id="screen-accounts" class="screen">
+  <div class="acc-wrap">
+    <div class="acc-header">
+      <div class="brand-row"><div class="logo small"><span class="bar r"></span><span class="bar g"></span><span class="bar b"></span></div><div class="brand sm">RGB<span>Tv</span></div></div>
+      <h1 class="profiles-title" id="profiles-title">Who's watching?</h1>
+    </div>
+    <div id="acc-list" class="profiles"></div>
+    <div class="acc-actions">
+      <button class="btn ghost focusable" data-action="add-account" data-nav="acc-actions"><svg class="ico" viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg><span class="lbl" data-i18n="acc.add">Add Profile</span></button>
+      <button class="btn ghost focusable" data-action="pair-phone" data-nav="acc-actions" id="pair-btn"><svg class="ico" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v13h10V5H7zm5 14.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg><span class="lbl" data-i18n="pair.btn">Add from phone</span></button>
+      <button class="btn ghost focusable" data-action="manage-profiles" data-nav="acc-actions" id="manage-btn"><svg class="ico" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.7-10.2a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span class="lbl" data-i18n="acc.manage">Manage Profiles</span></button>
+      <button class="btn ghost focusable" data-action="exit-app" data-nav="acc-actions"><svg class="ico" viewBox="0 0 24 24"><path d="M11 2h2v10h-2V2zm6.36 3.64l-1.42 1.42A7 7 0 1 1 8.06 7.06L6.64 5.64a9 9 0 1 0 10.72 0z"/></svg><span class="lbl" data-i18n="exit">Exit</span></button>
+    </div>
+    <div class="hint acc-hint"><span class="hint-pill"><b data-i18n="acc.mac">Device MAC (Stalker)</b><span class="hint-sep"></span><b id="acc-mac"></b></span><span class="hint-pill" id="acc-device"></span><span class="hint-pill"><span class="key red"></span><span data-i18n="acc.redhint">Profile menu</span></span><span class="hint-pill"><svg class="ico" viewBox="0 0 24 24"><path d="M7 2h10a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm0 3v13h10V5H7zm5 14.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg><span data-i18n="pair.hint">Add servers from your phone without the remote</span></span></div>
+  </div>
+</div>
+
+<!-- ================= ADD FROM PHONE (QR pairing) ================= -->
+<div id="screen-pair" class="screen"><button class="host-back" data-action="host-back" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg></button>
+  <div class="pair-wrap">
+    <div class="pair-left">
+      <div class="brand-row"><div class="logo small"><span class="bar r"></span><span class="bar g"></span><span class="bar b"></span></div><div class="brand sm">RGB<span>Tv</span></div></div>
+      <h2 data-i18n="pair.title">Add a server from your phone</h2>
+      <ol class="pair-steps">
+        <li data-i18n="pair.s1">Connect your phone to the same Wi-Fi as the TV.</li>
+        <li data-i18n="pair.s2">Scan the QR code (or type the address in the phone browser).</li>
+        <li data-i18n="pair.s3">Fill in the server details on the phone and tap Send.</li>
+        <li data-i18n="pair.s4">The profile appears here automatically and connects.</li>
+      </ol>
+      <div class="pair-status" id="pair-status"><span class="live-dot"></span><span id="pair-status-text" data-i18n="pair.waiting">Waiting for your phone…</span></div>
+      <div class="acc-actions"><button class="btn ghost focusable" data-nav="pair" data-action="pair-cancel" data-i18n="back">Back</button></div>
+    </div>
+    <div class="pair-right">
+      <div class="qr-box" id="pair-qr"></div>
+      <div class="pair-url" id="pair-url">—</div>
+      <div class="pair-alt muted" id="pair-alt"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PIN ================= -->
+<div id="screen-pin" class="screen">
+  <div class="pin-wrap">
+    <img id="pin-avatar" class="pin-avatar" alt="">
+    <h2 id="pin-title">Enter PIN</h2>
+    <p class="muted" id="pin-sub">This profile is protected</p>
+    <div class="pin-dots" id="pin-dots"><i></i><i></i><i></i><i></i></div>
+    <div class="numpad" id="numpad"></div>
+    <button class="btn ghost focusable" data-nav="pin" data-action="pin-cancel">Cancel</button>
+  </div>
+</div>
+
+<!-- ================= ADD / EDIT PROFILE ================= -->
+<div id="screen-add" class="screen"><button class="host-back" data-action="host-back" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg></button>
+  <div class="form-wrap">
+    <h2 id="add-title">Add Profile</h2>
+    <div class="avatar-picker" id="avatar-picker"></div>
+    <div class="tabs" id="add-type-tabs">
+      <button class="tab focusable active" data-type="xtream" data-nav="add-tabs">Xtream Codes</button>
+      <button class="tab focusable" data-type="stalker" data-nav="add-tabs">Stalker Portal</button>
+      <button class="tab focusable" data-type="m3u" data-nav="add-tabs">M3U Playlist</button>
+    </div>
+    <form id="add-form" class="form" autocomplete="off">
+      <div class="form-grid">
+        <label>Profile name<input class="focusable" data-nav="add-form" name="name" placeholder="e.g. Living room" required></label>
+        <label>PIN (optional, 4 digits)<input class="focusable" data-nav="add-form" name="pin" placeholder="••••" maxlength="4" inputmode="numeric"></label>
+      </div>
+      <div class="type-fields" data-for="xtream stalker m3u">
+        <label><span id="lbl-url">Server URL</span><input class="focusable" data-nav="add-form" name="url" placeholder="http://host:port" required></label>
+      </div>
+      <div class="type-fields" data-for="xtream">
+        <div class="form-grid">
+          <label>Username<input class="focusable" data-nav="add-form" name="username" placeholder="username"></label>
+          <label>Password<input class="focusable" data-nav="add-form" name="password" type="password" placeholder="password"></label>
+        </div>
+      </div>
+      <div class="type-fields" data-for="stalker">
+        <label>MAC Address<input class="focusable" data-nav="add-form" name="mac" placeholder="00:1A:79:XX:XX:XX" maxlength="17"></label>
+        <div class="form-grid">
+          <label>Serial Number (optional)<input class="focusable" data-nav="add-form" name="sn" placeholder="auto"></label>
+          <label>Device ID (optional)<input class="focusable" data-nav="add-form" name="deviceId" placeholder="auto"></label>
+        </div>
+      </div>
+      <div class="type-fields" data-for="m3u">
+        <label>EPG URL (optional)<input class="focusable" data-nav="add-form" name="epg" placeholder="http://…/xmltv.xml"></label>
+      </div>
+      <div class="switch-row">
+        <div><b>Kids profile</b><p class="muted">Hides adult content and locks parental settings.</p></div>
+        <button type="button" class="switch focusable" data-nav="add-form" id="kids-switch" data-on="0"><i></i></button>
+      </div>
+      <div id="add-error" class="error"></div>
+      <div class="form-actions">
+        <button type="submit" class="btn focusable" data-nav="add-form" id="add-save">Save &amp; Connect</button>
+        <button type="button" class="btn ghost focusable" data-nav="add-form" data-action="cancel-add">Cancel</button>
+        <button type="button" class="btn ghost focusable" data-nav="add-form" data-action="pair-phone">📱 <span data-i18n="pair.btn">Add from phone</span></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ================= HOME / MAIN ================= -->
+<div id="screen-home" class="screen">
+  <div id="bg-fx"></div>
+  <header class="topbar">
+    <div class="logo small"><span class="bar r"></span><span class="bar g"></span><span class="bar b"></span></div>
+    <div class="brand sm">RGB<span>Tv</span></div>
+    <nav class="mainnav" id="mainnav">
+      <button class="nav-item focusable active" data-section="home" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg></span><span data-i18n="nav.home">Home</span></button>
+      <button class="nav-item focusable" data-section="favorites" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="m12 2 3 6.5 7 .8-5.2 4.8 1.4 7L12 17.5 5.8 21l1.4-7L2 9.3l7-.8z"/></svg></span><span data-i18n="nav.favorites">Favorites</span></button>
+      <button class="nav-item focusable" data-section="live" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M3 5h18v12H3zm5 14h8v2H8z"/></svg></span><span data-i18n="nav.live">Live TV</span></button>
+      <button class="nav-item focusable" data-section="movies" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zm2 2v2h2V6zm0 4v2h2v-2zm0 4v2h2v-2zm10-8v2h2V6zm0 4v2h2v-2zm0 4v2h2v-2zM10 6v12h4V6z"/></svg></span><span data-i18n="nav.movies">Movies</span><span class="nv-new" id="new-movies"></span></button>
+      <button class="nav-item focusable" data-section="series" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M4 6h16v11H4zm3 13h10v2H7zM6 3h12v2H6z"/></svg></span><span data-i18n="nav.series">Series</span><span class="nv-new" id="new-series"></span></button>
+      <button class="nav-item focusable" data-section="search" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M10 2a8 8 0 1 0 4.9 14.3l5.4 5.4 1.4-1.4-5.4-5.4A8 8 0 0 0 10 2zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12z"/></svg></span><span data-i18n="nav.search">Search</span></button>
+      <button class="nav-item focusable" data-section="weather" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M6 19a4 4 0 0 1-.5-7.97A6 6 0 0 1 17.3 9.1 4.5 4.5 0 0 1 17.5 18H6z"/></svg></span><span data-i18n="nav.weather">Weather</span></button>
+      <button class="nav-item focusable" data-section="adhan" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M12 2c.6 1.8 1.6 3 3 3.6-1.4.6-2.4 1.8-3 3.6-.6-1.8-1.6-3-3-3.6 1.4-.6 2.4-1.8 3-3.6zM4 22v-9l3-2.5V8h2v2.5l3 2.5v9h-2v-6H6v6H4zm11-13.5c1.6-1 3.8-.9 5.3.4-1.2 0-2.3.5-3.1 1.3-.7.8-1 1.9-1 3 0 1.2.4 2.3 1.2 3.1.8.8 1.9 1.2 3 1.1-1.6 1.3-3.8 1.4-5.4.4-1.9-1.2-2.7-3.6-1.9-5.7.4-1.1 1.1-2 1.9-2.6z"/></svg></span><span data-i18n="nav.adhan">Adhan</span></button>
+      <button class="nav-item focusable" data-section="settings" data-nav="topnav"><span class="nv-ico"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3H9l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L4.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L9 21h6l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg></span><span data-i18n="nav.settings">Settings</span></button>
+    </nav>
+    <button class="hub-home focusable" id="hub-home" data-section="home" data-nav="topnav"><span class="hh-ico">⌂</span><span data-i18n="hub.home">Home</span><span class="hh-sep">›</span><span id="hub-cur"></span></button>
+    <div class="topbar-right">
+      <div class="expiry hidden" id="expiry"></div>
+      <button class="adhan-chip focusable" id="adhan-chip" data-section="adhan" data-nav="topnav"></button>
+      <button class="weather focusable" id="weather" data-section="weather" data-nav="topnav"></button>
+      <div class="clock-box"><div class="clock" id="clock">--:--</div><div class="clock-date" id="clock-date"></div></div>
+      <button class="account-chip focusable" data-action="switch-account" data-nav="topnav" id="account-chip" title="Switch profile">
+        <img class="avatar" id="chip-avatar" alt=""><span class="chip-name" id="chip-name">Profile</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="content">
+    <!-- HOME -->
+    <section id="sec-home" class="section active">
+      <div class="hub" id="hub"></div>
+      <div class="hero" id="hero">
+        <div class="hero-bg" id="hero-bg"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <div class="hero-tag" id="hero-tag">Featured</div>
+          <h2 id="hero-title">Welcome to RGBTv</h2>
+          <div class="hero-meta" id="hero-meta"></div>
+          <p id="hero-desc" class="muted">Your live channels, movies and series in one place.</p>
+          <div class="hero-actions">
+            <button class="btn focusable" data-nav="hero" data-action="hero-play" data-i18n="play">▶ Play</button>
+            <button class="btn ghost focusable" data-nav="hero" data-action="hero-info" data-i18n="details">Details</button>
+          </div>
+        </div>
+        <div class="hero-poster" id="hero-poster"></div>
+        <div class="hero-clock" id="hero-clock"><b id="hero-clock-time">--:--</b><span id="hero-clock-date"></span></div>
+        <div class="hero-dots" id="hero-dots"></div>
+      </div>
+      <div class="rows" id="home-rows"></div>
+    </section>
+
+    <!-- LIVE -->
+    <section id="sec-live" class="section browse">
+      <aside class="cat-panel"><div class="panel-title" data-i18n="categories">Categories</div><div class="cat-list" id="live-cats"></div></aside>
+      <div class="channel-panel">
+        <div class="panel-title" id="live-cat-title">All Channels</div>
+        <div class="channel-list" id="live-channels"></div>
+      </div>
+      <div class="preview-panel">
+        <div class="preview-video" id="live-preview"><div class="preview-placeholder" data-i18n="selectChannel">Select a channel</div></div>
+        <div class="epg-box">
+          <div class="epg-now"><span class="lbl" data-i18n="nowLbl">NOW</span><span id="epg-now-title">—</span></div>
+          <div class="epg-progress"><div id="epg-progress-bar"></div></div>
+          <div class="epg-next"><span class="lbl" data-i18n="next">NEXT</span><span id="epg-next-title">—</span></div>
+        </div>
+        <div class="epg-list" id="epg-list"></div>
+        <div class="key-legend" id="live-legend">
+          <span><i class="k red"></i><b data-i18n="leg.fav">Favorite</b></span>
+          <span><i class="k green"></i><b data-i18n="leg.mylist">My List</b></span>
+          <span><i class="k yellow"></i><b data-i18n="leg.lock">Lock</b></span>
+          <span><i class="k ok">OK</i><b data-i18n="leg.play">Play</b></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- MOVIES -->
+    <section id="sec-movies" class="section browse">
+      <aside class="cat-panel"><div class="panel-title" data-i18n="categories">Categories</div><div class="cat-list" id="movies-cats"></div></aside>
+      <div class="grid-panel">
+        <div class="panel-title"><span id="movies-cat-title">All Movies</span> <span class="count" id="movies-count"></span></div>
+        <div class="key-legend"><span><i class="k red"></i><b data-i18n="leg.fav">Favorite</b></span><span><i class="k green"></i><b data-i18n="leg.mylist">My List</b></span><span><i class="k ok">OK</i><b data-i18n="leg.details">Details</b></span></div>
+        <div class="poster-grid" id="movies-grid"></div>
+      </div>
+    </section>
+
+    <!-- SERIES -->
+    <section id="sec-series" class="section browse">
+      <aside class="cat-panel"><div class="panel-title" data-i18n="categories">Categories</div><div class="cat-list" id="series-cats"></div></aside>
+      <div class="grid-panel">
+        <div class="panel-title"><span id="series-cat-title">All Series</span> <span class="count" id="series-count"></span></div>
+        <div class="key-legend"><span><i class="k red"></i><b data-i18n="leg.fav">Favorite</b></span><span><i class="k green"></i><b data-i18n="leg.mylist">My List</b></span><span><i class="k ok">OK</i><b data-i18n="leg.details">Details</b></span></div>
+        <div class="poster-grid" id="series-grid"></div>
+      </div>
+    </section>
+
+    <!-- FAVORITES -->
+    <section id="sec-favorites" class="section"><div class="rows" id="fav-rows"></div></section>
+
+    <!-- SEARCH -->
+    <section id="sec-search" class="section search">
+      <div class="search-left">
+        <div class="search-field"><span class="search-ico">⌕</span><input id="search-input" class="focusable" data-nav="search" placeholder="Search channels, movies, series…" data-i18n-ph="search.ph"><span class="caret"></span></div>
+        <div class="osk" id="osk"></div>
+      </div>
+      <div class="search-right"><div class="rows" id="search-rows"><div class="empty" data-i18n="search.min">Type at least 2 characters.</div></div></div>
+    </section>
+
+    <!-- WEATHER (v1.8) -->
+    <section id="sec-weather" class="section weather-sec"></section>
+    <section id="sec-adhan" class="section weather-sec adhan-sec"></section>
+
+    <!-- SETTINGS -->
+    <section id="sec-settings" class="section">
+      <div class="settings-wrap">
+        <h2 data-i18n="settings">Settings</h2>
+        <div class="setting-row"><div><b data-i18n="set.language">Language</b><p class="muted" data-i18n="set.language.d">Interface language and layout direction.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="lang">English</button></div>
+        <div class="setting-row"><div><b data-i18n="set.theme">Theme</b><p class="muted" data-i18n="set.theme.d">Aurora · Midnight · OLED Black · Ocean</p></div>
+          <div class="theme-swatches" id="theme-swatches">
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="aurora" data-theme="aurora"><i></i><span class="nm" data-i18n="theme.aurora">Aurora</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="midnight" data-theme="midnight"><i></i><span class="nm" data-i18n="theme.midnight">Midnight</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="oled" data-theme="oled"><i></i><span class="nm" data-i18n="theme.oled">OLED</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="ocean" data-theme="ocean"><i></i><span class="nm" data-i18n="theme.ocean">Ocean</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="crimson" data-theme="crimson"><i></i><span class="nm" data-i18n="theme.crimson">Crimson</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="emerald" data-theme="emerald"><i></i><span class="nm" data-i18n="theme.emerald">Emerald</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="sunset" data-theme="sunset"><i></i><span class="nm" data-i18n="theme.sunset">Sunset</span></button>
+            <button class="swatch focusable" data-nav="settings" data-theme-pick="royal" data-theme="royal"><i></i><span class="nm" data-i18n="theme.royal">Royal</span></button>
+          </div></div>
+        <div class="setting-row"><div><b data-i18n="set.accent">Accent color</b><p class="muted" data-i18n="set.accent.d">Color of highlights, buttons and progress bars. Auto follows the theme.</p></div>
+          <div class="theme-swatches accents" id="accent-swatches">
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="auto"><i class="ac-auto"></i><span class="nm" data-i18n="accent.auto">Auto</span></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="violet"><i style="background:#6d5dfc"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="blue"><i style="background:#3b82f6"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="cyan"><i style="background:#06b6d4"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="green"><i style="background:#22c55e"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="gold"><i style="background:#eab308"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="orange"><i style="background:#f97316"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="red"><i style="background:#ef4444"></i></button>
+            <button class="swatch accent focusable" data-nav="settings" data-accent-pick="pink"><i style="background:#ec4899"></i></button>
+          </div></div>
+        <div class="setting-row"><div><b data-i18n="set.layout">Interface style</b><p class="muted" data-i18n="set.layout.d">Classic RGBTv (hero + rows) · VIU-style hub · IBO Player-style hub.</p></div>
+          <div class="theme-swatches" id="layout-swatches">
+            <button class="swatch layout focusable" data-nav="settings" data-layout-pick="classic"><i class="lay-classic"></i><span class="nm" data-i18n="lay.classic">Classic</span></button>
+            <button class="swatch layout focusable" data-nav="settings" data-layout-pick="spotlight"><i class="lay-spotlight"></i><span class="nm" data-i18n="lay.spotlight">Spotlight</span></button>
+            <button class="swatch layout focusable" data-nav="settings" data-layout-pick="trio"><i class="lay-trio"></i><span class="nm" data-i18n="lay.trio">Trio</span></button>
+            <button class="swatch layout focusable" data-nav="settings" data-layout-pick="mosaic"><i class="lay-mosaic"></i><span class="nm" data-i18n="lay.mosaic">Mosaic</span></button>
+            <button class="swatch layout focusable" data-nav="settings" data-layout-pick="dashboard"><i class="lay-dashboard"></i><span class="nm" data-i18n="lay.dashboard">Dashboard</span></button>
+          </div></div>
+        <div class="setting-row"><div><b data-i18n="set.corners">Corners</b><p class="muted" data-i18n="set.corners.d">Rounded or square cards, tiles and buttons.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="corners">Rounded</button></div>
+        <div class="setting-row"><div><b data-i18n="set.glow">Background glow</b><p class="muted" data-i18n="set.glow.d">Soft colored light behind the interface and under the highlight.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="glow">On</button></div>
+        <div class="setting-row"><div><b data-i18n="set.pointer">Magic Remote pointer</b><p class="muted" data-i18n="set.pointer.d">Click only: pointing at items does nothing, only OK selects.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="pointer">Click only</button></div>
+        <div class="setting-row"><div><b data-i18n="set.focus">Focus style</b><p class="muted" data-i18n="set.focus.d">How the highlighted item looks: Glow · Classic ring · Zoom only.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="focusStyle">Glow</button></div>
+        <div class="setting-row"><div><b data-i18n="set.large">Large UI</b><p class="muted" data-i18n="set.large.d">Bigger text, posters and lists — easier to read from the sofa.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="largeUi">Off</button></div>
+        <div class="setting-row"><div><b data-i18n="set.liveGrid">Live TV channel style</b><p class="muted" data-i18n="set.liveGrid.d">List with EPG, or a grid of channel logos.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="liveGrid">List</button></div>
+        <div class="setting-row"><div><b data-i18n="set.ambient">Ambient screensaver</b><p class="muted" data-i18n="set.ambient.d">After 5 minutes idle (outside the player) show a clock with slow artwork slideshow.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="ambient">On</button></div>
+        <div class="setting-row"><div><b data-i18n="set.weather">Weather next to the clock</b><p class="muted" data-i18n="set.weather.d">Temperature for your location (Open-Meteo, no key required).</p></div><div class="setting-actions"><button class="btn ghost focusable" data-nav="settings" data-action="wx-location" data-i18n="wx.setLocation">Location</button><button class="btn ghost focusable" data-nav="settings" data-setting="wxUnit">°C</button><button class="btn ghost focusable" data-nav="settings" data-setting="weather">On</button></div></div>
+        <div class="setting-row"><div><b data-i18n="set.adhan">Adhan &amp; prayer times</b><p class="muted" data-i18n="set.adhan.d">Prayer-time banner on top of everything, even while watching. Same location as the weather.</p></div><div class="setting-actions"><button class="btn ghost focusable" data-nav="settings" data-section="adhan" data-i18n="set.adhan.open">Open</button><button class="btn ghost focusable" data-nav="settings" data-setting="adhan">On</button></div></div>
+        <div class="setting-row"><div><b data-i18n="set.autonext">Auto-play next episode</b><p class="muted" data-i18n="set.autonext.d">10-second countdown at the end of an episode.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="autoNext">On</button></div>
+        <div class="setting-row"><div><b data-i18n="set.refresh">Auto-refresh playlists</b><p class="muted" data-i18n="set.refresh.d">Reload channels, movies and series in the background and notify you about new content.</p></div><div class="setting-actions"><button class="btn ghost focusable" data-nav="settings" data-setting="refresh">Every 6 h</button><button class="btn ghost sm focusable" data-nav="settings" data-action="refresh-now" data-i18n="set.refreshNow">Refresh now</button></div></div>
+        <div class="setting-row"><div><b data-i18n="set.liveFormat">Live stream format</b><p class="muted" data-i18n="set.liveFormat.d">Xtream only. HLS works on more TVs; TS is lower latency.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="liveFormat">HLS (m3u8)</button></div>
+        <div class="setting-row"><div><b data-i18n="set.engine">Player engine</b><p class="muted" data-i18n="set.engine.d">Auto tries native first then hls.js.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="engine">Auto</button></div>
+        <div class="setting-row"><div><b data-i18n="set.parental">Parental control</b><p class="muted" id="parental-desc" data-i18n="set.parental.d">Hide adult categories.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="parental">On</button></div>
+        <div class="setting-row"><div><b data-i18n="set.preview">Live preview window</b><p class="muted" data-i18n="set.preview.d">Play the highlighted channel in the small preview. Turn off on slow TVs.</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="preview">On</button></div>
+        <div class="setting-row"><div><b data-i18n="set.autostart">Auto-start last profile</b><p class="muted" data-i18n="set.autostart.d">Skip the profile screen on launch (PIN still required).</p></div><button class="btn ghost focusable" data-nav="settings" data-setting="autostart">Off</button></div>
+        <div class="setting-row"><div><b data-i18n="set.tmdb">TMDB artwork &amp; ratings</b><p class="muted" data-i18n="set.tmdb.d">Optional. Paste a TMDB API key (v3) to enrich movies &amp; series with backdrops, plots and ratings.</p></div><input class="focusable setting-input" data-nav="settings" id="tmdb-key" placeholder="TMDB API key"></div>
+        <div class="setting-row"><div><b data-i18n="set.cache">Clear cache</b><p class="muted" data-i18n="set.cache.d">Remove cached categories, lists, EPG and artwork.</p></div><button class="btn ghost focusable" data-nav="settings" data-action="clear-cache" data-i18n="clear">Clear</button></div>
+        <div class="setting-row"><div><b data-i18n="pair.btn">Add from phone</b><p class="muted" data-i18n="pair.set.d">Show a QR code; type the server details on your phone instead of the remote.</p></div><button class="btn ghost focusable" data-nav="settings" data-action="pair-phone">📱 QR</button></div>
+        <div class="setting-row"><div><b data-i18n="set.profile">Profile</b><p class="muted" id="settings-account-info"></p></div><div class="setting-actions"><button class="btn ghost focusable" data-nav="settings" data-action="edit-account" data-i18n="edit">Edit</button><button class="btn ghost focusable" data-nav="settings" data-action="switch-account" data-i18n="switch">Switch</button></div></div>
+        <div class="setting-row"><div><b data-i18n="set.about">About</b><p class="muted">RGBTv v1.9.0 for LG webOS · Xtream Codes · Stalker Portal · M3U · Native player + hls.js</p></div><button class="btn ghost focusable" data-nav="settings" data-action="exit-app" data-i18n="set.exit">Exit App</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ================= DETAILS ================= -->
+<div id="screen-details" class="screen"><button class="host-back" data-action="host-back" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg></button>
+  <div class="details-bg" id="details-bg"></div>
+  <div class="details-shade"></div>
+  <div class="details-wrap" id="details-wrap">
+    <div class="details-top">
+      <div class="details-poster"><img id="details-poster" alt=""><div class="dp-badge" id="details-type"></div></div>
+      <div class="details-info">
+        <div class="details-kicker" id="details-kicker"></div>
+        <h2 id="details-title"></h2>
+        <div class="meta chips" id="details-meta"></div>
+        <div class="tagline" id="details-tagline"></div>
+        <p class="plot" id="details-plot"></p>
+        <div class="details-actions" id="details-actions">
+          <button class="btn focusable" data-nav="details" data-action="details-play" data-i18n="play">▶ Play</button>
+          <button class="btn ghost focusable" data-nav="details" data-action="details-resume" id="details-resume" style="display:none">Resume</button>
+          <button class="btn ghost focusable" data-nav="details" data-action="details-trailer" id="details-trailer" style="display:none">Trailer</button>
+          <button class="btn ghost focusable" data-nav="details" data-action="details-fav">☆ Favorite</button>
+          <button class="btn ghost focusable" data-nav="details" data-action="details-back" data-i18n="back">Back</button>
+        </div>
+        <div class="cast-row" id="details-cast"></div>
+      </div>
+    </div>
+    <div class="details-bottom" id="details-bottom">
+      <div class="seasons" id="details-seasons"></div>
+      <div class="episodes" id="details-episodes"></div>
+      <div class="similar" id="details-similar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PLAYER ================= -->
+<div id="screen-player" class="screen"><button class="host-back" data-action="host-back" aria-label="Back"><svg viewBox="0 0 24 24"><path d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg></button>
+  <video id="video" autoplay playsinline disableRemotePlayback></video>
+  <div class="player-loading" id="player-loading"><div class="loader"></div><span id="player-loading-text">Loading…</span></div>
+  <div class="player-error" id="player-error"></div>
+  <div class="osd" id="osd">
+    <div class="osd-top">
+      <div class="osd-logo" id="osd-logo"></div>
+      <div><div class="osd-title" id="osd-title"></div><div class="osd-sub" id="osd-sub"></div></div>
+      <div class="osd-right"><div class="osd-quality" id="osd-quality" style="display:none"></div><div class="osd-clock" id="osd-clock"></div></div>
+    </div>
+    <div class="osd-bottom">
+      <div class="osd-epg" id="osd-epg"></div>
+      <div class="osd-progress" id="osd-progress"><div class="osd-buffer" id="osd-buffer"></div><div class="osd-played" id="osd-played"></div></div>
+      <div class="osd-times"><span id="osd-cur">00:00</span><span id="osd-dur">00:00</span></div>
+      <div class="osd-controls">
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-prev"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-rew"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M11 18V6l-8.5 6zm.5-6 8.5 6V6z"/></svg></button>
+        <button class="osd-btn focusable big" data-nav="osd" data-action="p-play" id="osd-play"><svg viewBox="0 0 24 24" width="36" height="36" fill="currentColor"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-ffw"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M4 18l8.5-6L4 6zm9 0 8.5-6L13 6z"/></svg></button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-next"><svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor"><path d="M6 18l8.5-6L6 6zM16 6h2v12h-2z"/></svg></button>
+        <span class="spacer"></span>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-audio" id="osd-audio" data-i18n="p.audio">Audio</button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-subs" id="osd-subs" data-i18n="p.subs">Subtitles</button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-ratio" id="osd-ratio">Fit</button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-fav" id="osd-fav">☆</button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-stats" id="osd-stats" data-i18n="p.stats">Stats</button>
+        <button class="osd-btn focusable" data-nav="osd" data-action="p-list" id="osd-list-btn" data-i18n="p.channels">Channels</button>
+      </div>
+    </div>
+  </div>
+  <div class="zap-list" id="zap-list"></div>
+  <div class="channel-number" id="channel-number"></div>
+  <div class="zap-preview" id="zap-preview"></div>
+  <div class="stats-box" id="stats-box"></div>
+  <div class="locked-overlay" id="locked-overlay"><div class="lo-ico">🔒</div><h3 data-i18n="lockedChannel">Locked channel</h3><p data-i18n="enterPin">Enter PIN to unlock</p><div class="pin-dots" id="lock-dots"><i></i><i></i><i></i><i></i></div></div>
+  <div class="track-menu" id="track-menu"></div>
+  <div class="autonext" id="autonext">
+    <div class="an-ring"><svg viewBox="0 0 120 120" width="120" height="120"><circle class="an-track" cx="60" cy="60" r="52"/><circle class="an-bar" id="an-bar" cx="60" cy="60" r="52"/></svg><b id="an-count">10</b></div>
+    <div class="an-text"><div class="an-lbl" data-i18n="an.next">Up next</div><div class="an-title" id="an-title"></div><div class="an-hint" data-i18n="an.hint">OK: play now · BACK: cancel</div></div>
+  </div>
+</div>
+
+<!-- ================= AMBIENT SCREENSAVER ================= -->
+<div id="ambient" class="ambient"><div class="amb-bg" id="amb-bg1"></div><div class="amb-bg" id="amb-bg2"></div><div class="amb-shade"></div><div class="amb-clock"><b id="amb-time">--:--</b><span id="amb-date"></span></div><div class="amb-title" id="amb-title"></div><div class="amb-brand"><div class="logo small"><span class="bar r"></span><span class="bar g"></span><span class="bar b"></span></div><div class="brand sm">RGB<span>Tv</span></div></div></div>
+
+<!-- ================= MODAL / TOAST ================= -->
+<div id="modal" class="modal"><div class="modal-box"><h3 id="modal-title"></h3><p id="modal-text"></p><div class="modal-actions" id="modal-actions"></div></div></div>
+<div id="toast" class="toast"><span class="ico" id="toast-ico"></span><span id="toast-msg"></span><i class="toast-bar" id="toast-bar"></i></div>
+</div><!-- /#app -->
+
+<script src="js/lib/hls.min.js"></script>
+<script src="js/lib/qrcode.min.js"></script>
+<script src="js/xbox.js"></script>
+<script src="js/util.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/vlist.js"></script>
+<script src="js/avatars.js"></script>
+<script src="js/api/xtream.js"></script>
+<script src="js/api/stalker.js"></script>
+<script src="js/api/m3u.js"></script>
+<script src="js/tmdb.js"></script>
+<script src="js/weather.js"></script>
+<script src="js/player.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/keyboard.js"></script>
+<script src="js/adhan.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

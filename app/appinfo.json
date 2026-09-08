@@ -1,0 +1,17 @@
+{
+  "id": "com.rgbtv.app",
+  "version": "2.1.3",
+  "vendor": "RGBTv",
+  "type": "web",
+  "main": "index.html",
+  "title": "RGBTv",
+  "icon": "img/icon.png",
+  "largeIcon": "img/largeIcon.png",
+  "bgImage": "img/bg.png",
+  "splashBackground": "img/splash.png",
+  "iconColor": "#0b0f19",
+  "resolution": "1920x1080",
+  "disableBackHistoryAPI": true,
+  "supportTouchMode": "none",
+  "requiredPermissions": ["time.query", "settings.read"]
+}

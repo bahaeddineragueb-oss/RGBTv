@@ -1,0 +1,31 @@
+{
+  "name": "rgbtv-desktop",
+  "productName": "RGBTv",
+  "version": "2.0.3",
+  "description": "RGBTv IPTV player for Windows / macOS / Linux",
+  "main": "main.js",
+  "author": "RGBTv",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "sync": "node sync.js",
+    "dist:win": "node sync.js && electron-builder --win nsis portable",
+    "dist:linux": "node sync.js && electron-builder --linux AppImage",
+    "dist:mac": "node sync.js && electron-builder --mac dmg"
+  },
+  "devDependencies": {
+    "electron": "^28.3.3",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.rgbtv.desktop",
+    "productName": "RGBTv",
+    "directories": { "output": "release" },
+    "files": ["main.js", "preload.js", "pair.js", "www/**/*", "icon.png", "icon.ico"],
+    "win": { "target": ["nsis", "portable"], "icon": "icon.ico" },
+    "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "perMachine": false, "createDesktopShortcut": true },
+    "portable": { "artifactName": "RGBTv-portable-${version}.exe" },
+    "linux": { "target": ["AppImage"], "icon": "icon.png", "category": "AudioVideo" },
+    "mac": { "target": ["dmg"], "icon": "icon.png", "category": "public.app-category.entertainment" }
+  }
+}
