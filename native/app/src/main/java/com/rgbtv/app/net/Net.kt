@@ -118,13 +118,14 @@ object Net {
         return s.trimEnd('/')
     }
 
-    /** Friendly message for UI. */
-    fun userMsg(ctx: android.content.Context, e: Throwable): String {
+    /** Friendly message for UI. Null-safe: fragments may pass a null context. */
+    fun userMsg(ctx: android.content.Context?, e: Throwable): String {
         val m = e.message ?: ""
+        val auth = (e is HttpEx && (e.code == 401 || e.code == 403)) ||
+            Regex("Auth|auth|401|403").containsMatchIn(m)
         return when {
-            e is HttpEx && (e.code == 401 || e.code == 403) -> ctx.getString(com.rgbtv.app.R.string.err_auth)
-            Regex("Auth|auth|401|403").containsMatchIn(m) -> ctx.getString(com.rgbtv.app.R.string.err_auth)
-            else -> ctx.getString(com.rgbtv.app.R.string.err_network) + "\n$m"
+            auth -> ctx?.getString(com.rgbtv.app.R.string.err_auth) ?: "Authentication failed"
+            else -> (ctx?.getString(com.rgbtv.app.R.string.err_network) ?: "Network error") + "\n$m"
         }
     }
 }

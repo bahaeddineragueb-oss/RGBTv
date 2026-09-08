@@ -39,7 +39,7 @@ interface Provider {
     fun close() {}
 }
 
-suspend fun <T> io(block: () -> T): T = withContext(Dispatchers.IO) { block() }
+suspend fun <T> io(block: suspend () -> T): T = withContext(Dispatchers.IO) { block() }
 
 object ProviderFactory {
     fun create(acc: Account): Provider {
