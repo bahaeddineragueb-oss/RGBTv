@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0B0F19</color>
+    <color name="bg2">#0E1422</color>
+    <color name="surface">#141A29</color>
+    <color name="card">#1A2233</color>
+    <color name="card2">#222C42</color>
+    <color name="line">#26314A</color>
+    <color name="text">#F2F5FA</color>
+    <color name="sub">#9AA3B2</color>
+    <color name="dim">#5E6B85</color>
+    <color name="live">#E5484D</color>
+    <color name="ok">#3ECF8E</color>
+    <color name="warn">#F5A524</color>
+    <color name="accent_blue">#4F7CFF</color>
+    <color name="accent_green">#22B573</color>
+    <color name="accent_red">#E5484D</color>
+    <color name="accent_purple">#9B5CF6</color>
+    <color name="accent_gold">#E8B33D</color>
+    <color name="placeholder">#1B2334</color>
+    <color name="scrim">#CC0B0F19</color>
+</resources>

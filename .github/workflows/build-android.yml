@@ -1,0 +1,100 @@
+# Builds the RGBTv NATIVE Android app (.apk, ExoPlayer, no WebView) on a free GitHub runner.
+# Run: Actions → "Build Android APK (native)" → Run workflow → download the APK from Artifacts
+# (or from the "native-v3.0.0" release when publish_release is on).
+name: Build Android APK (native)
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_release:
+        description: 'Publish the APK to release "native-v3.0.0"'
+        type: boolean
+        default: true
+  push:
+    branches: [main, master]
+    paths:
+      - 'native/**'
+      - '.github/workflows/build-android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: native
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Ensure Android SDK packages
+        run: |
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKM" ]; then SDKM=$(find "$ANDROID_HOME/cmdline-tools" -name sdkmanager -type f | head -1); fi
+          echo "sdkmanager: $SDKM"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0" || true
+
+      - name: Decode release keystore (optional)
+        if: ${{ secrets.RGBTV_KEYSTORE_BASE64 != '' }}
+        env:
+          RGBTV_KEYSTORE_BASE64: ${{ secrets.RGBTV_KEYSTORE_BASE64 }}
+        run: |
+          echo "$RGBTV_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
+          echo "RGBTV_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+          echo "RGBTV_KEYSTORE_PASS=${{ secrets.RGBTV_KEYSTORE_PASS }}" >> "$GITHUB_ENV"
+          echo "RGBTV_KEY_ALIAS=${{ secrets.RGBTV_KEY_ALIAS }}" >> "$GITHUB_ENV"
+          echo "RGBTV_KEY_PASS=${{ secrets.RGBTV_KEY_PASS }}" >> "$GITHUB_ENV"
+
+      - name: Build release APK
+        run: chmod +x gradlew && ./gradlew :app:assembleRelease --stacktrace
+
+      - name: Collect APK
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk RGBTv-native-3.0.0.apk
+          ls -lh RGBTv-native-3.0.0.apk
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RGBTv-native-apk
+          path: native/RGBTv-native-3.0.0.apk
+          if-no-files-found: error
+
+      - name: Publish GitHub release
+        if: github.event_name == 'workflow_dispatch' && inputs.publish_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: native-v3.0.0
+          name: 'RGBTv 3.0.0 — Android native APK'
+          body: |
+            ## RGBTv 3.0.0 — تطبيق أندرويد أصلي (Native)
+
+            - مشغّل ExoPlayer أصلي — بدون WebView، أداء عالٍ وتشغيل سريع
+            - Xtream Codes + Stalker + M3U + دليل XMLTV
+            - بث مباشر / أفلام / مسلسلات + استئناف + حلقات تلقائية
+            - يعمل على الهاتف والتابلت و Android TV (ريموت)
+
+            **التثبيت:** حمّل `RGBTv-native-3.0.0.apk` وثبّته على جهازك (فعّل «مصادر غير معروفة»).
+            **ملاحظة:** إن كانت نسخة WebView القديمة مثبّتة (بنفس الاسم)، احذفها أولاً ثم ثبّت هذه.
+
+            ## RGBTv 3.0.0 — native Android app
+
+            - Native ExoPlayer (no WebView): fast start, smooth playback
+            - Xtream Codes + Stalker + M3U + XMLTV guide
+            - Live / Movies / Series + resume + auto-next episode
+            - Phone, tablet & Android TV (D-pad remote)
+
+            **Install:** download `RGBTv-native-3.0.0.apk` and sideload it (allow “unknown sources”).
+            **Note:** if the old WebView build is installed, uninstall it first (different signature).
+          files: native/RGBTv-native-3.0.0.apk

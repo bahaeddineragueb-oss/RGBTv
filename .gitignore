@@ -17,3 +17,10 @@ tools/shots/
 __pycache__/
 .DS_Store
 Thumbs.db
+# native Android app (Gradle)
+native/.gradle/
+native/build/
+native/app/build/
+native/*.apk
+native/local.properties
+native/.idea/

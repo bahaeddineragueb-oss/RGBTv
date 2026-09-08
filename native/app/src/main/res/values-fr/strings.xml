@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RGBTv</string>
+
+    <string name="who_watching">Qui regarde ?</string>
+    <string name="add_profile">Ajouter un profil</string>
+    <string name="switch_profile">Changer de profil</string>
+    <string name="edit_profile">Modifier le profil</string>
+    <string name="delete_profile">Supprimer le profil</string>
+    <string name="delete_confirm">Supprimer ce profil et ses données locales ?</string>
+    <string name="yes_delete">Oui, supprimer</string>
+    <string name="cancel">Annuler</string>
+    <string name="save">Enregistrer</string>
+    <string name="test">Tester la connexion</string>
+    <string name="testing">Test en cours…</string>
+    <string name="connecting">Connexion…</string>
+    <string name="loading">Chargement…</string>
+    <string name="retry">Réessayer</string>
+    <string name="no_profiles">Aucun profil — ajoutez votre premier serveur.</string>
+
+    <string name="acc_type">Type de serveur</string>
+    <string name="type_xtream">Xtream Codes</string>
+    <string name="type_stalker">Portail Stalker</string>
+    <string name="type_m3u">Playlist M3U</string>
+    <string name="f_name">Nom du profil</string>
+    <string name="f_url">URL du serveur</string>
+    <string name="f_user">Nom d\'utilisateur</string>
+    <string name="f_pass">Mot de passe</string>
+    <string name="f_mac">Adresse MAC</string>
+    <string name="f_epg">URL EPG (XMLTV, optionnel)</string>
+    <string name="new_mac">Nouvelle MAC</string>
+    <string name="getphp_hint">Astuce : un lien Xtream « get.php » est détecté et converti en connexion API, plus rapide.</string>
+    <string name="fill_all">Renseignez l\'URL, l\'utilisateur et le mot de passe.</string>
+    <string name="fill_url">Entrez l\'URL de la playlist.</string>
+    <string name="expires">Expire le</string>
+    <string name="status">Statut</string>
+    <string name="active">Actif</string>
+    <string name="unlimited">Illimité</string>
+
+    <string name="live_tv">TV en direct</string>
+    <string name="movies">Films</string>
+    <string name="series">Séries</string>
+    <string name="guide">Guide TV</string>
+    <string name="search">Recherche</string>
+    <string name="my_list">Ma liste</string>
+    <string name="settings">Paramètres</string>
+    <string name="continue_watching">Continuer à regarder</string>
+    <string name="favorites">Favoris</string>
+    <string name="channels_d">%1$d chaînes</string>
+    <string name="items_d">%1$d éléments</string>
+
+    <string name="all">Tout</string>
+    <string name="filter_hint">Filtrer…</string>
+    <string name="sort">Tri</string>
+    <string name="sort_name">Nom</string>
+    <string name="sort_added">Ajouts récents</string>
+    <string name="sort_num">Numéro</string>
+    <string name="no_results">Aucun résultat.</string>
+    <string name="now">En ce moment</string>
+    <string name="next">Suivant</string>
+    <string name="no_epg">Pas d\'infos programme</string>
+    <string name="live_badge">DIRECT</string>
+    <string name="locked">Verrouillé</string>
+    <string name="adult_locked">Verrouillé (18+). Entrez le PIN.</string>
+
+    <string name="play">Lecture</string>
+    <string name="play_s1e1">Lire S1:E1</string>
+    <string name="resume">Reprendre</string>
+    <string name="add_fav">Ma liste</string>
+    <string name="remove_fav">Retirer</string>
+    <string name="added_fav">Ajouté à votre liste</string>
+    <string name="removed_fav">Retiré de votre liste</string>
+    <string name="season">Saison %1$d</string>
+    <string name="episode_n">E%1$d</string>
+    <string name="episode_full">Épisode %1$d</string>
+    <string name="watched">Vu</string>
+    <string name="up_next">À suivre</string>
+    <string name="up_next_hint">Lecture dans %1$ds — RETOUR annule</string>
+    <string name="resumed_from">Reprise à %1$s</string>
+
+    <string name="replay">Revoir</string>
+    <string name="watch_live">Regarder en direct</string>
+    <string name="past">Terminé</string>
+    <string name="future">Bientôt</string>
+
+    <string name="search_hint">Chaînes, films, séries…</string>
+    <string name="results_d">%1$d résultats</string>
+
+    <string name="set_account">Profil actuel</string>
+    <string name="set_account_d">Modifier, changer ou tester</string>
+    <string name="set_livefmt">Format du direct</string>
+    <string name="set_livefmt_d">HLS plus stable · TS démarre plus vite</string>
+    <string name="fmt_auto">Auto (recommandé)</string>
+    <string name="fmt_hls">HLS (.m3u8)</string>
+    <string name="fmt_ts">MPEG-TS (.ts)</string>
+    <string name="set_lang">Langue</string>
+    <string name="lang_system">Système</string>
+    <string name="set_accent">Couleur d\'accent</string>
+    <string name="accent_blue">Bleu</string>
+    <string name="accent_green">Vert</string>
+    <string name="accent_red">Rouge</string>
+    <string name="accent_purple">Violet</string>
+    <string name="accent_gold">Doré</string>
+    <string name="set_parental">Contrôle parental</string>
+    <string name="set_parental_d">PIN requis pour verrous et 18+</string>
+    <string name="on">Activé</string>
+    <string name="off">Désactivé</string>
+    <string name="set_pin">Changer le PIN</string>
+    <string name="set_pin_d">Code à 4 chiffres</string>
+    <string name="set_unlockall">Tout déverrouiller</string>
+    <string name="set_unlockall_d">Effacer les verrous de ce profil</string>
+    <string name="unlocked_all">Verrous effacés</string>
+    <string name="set_refresh">Actualiser</string>
+    <string name="set_refresh_d">Vider le cache et recharger</string>
+    <string name="refreshed">Contenu actualisé</string>
+    <string name="set_about">À propos</string>
+    <string name="about_text">RGBTv %1$s — lecteur IPTV Android natif.\nXtream Codes · Stalker · M3U · EPG XMLTV.\nRapide : ExoPlayer + analyse en flux.</string>
+    <string name="set_exit">Quitter</string>
+    <string name="lock_hint">Appui long sur une chaîne ou une affiche pour la verrouiller.</string>
+    <string name="locked_item">Verrouillé</string>
+    <string name="unlocked_item">Déverrouillé</string>
+
+    <string name="pin_title">Entrez le PIN</string>
+    <string name="pin_new">Choisissez un PIN</string>
+    <string name="pin_confirm">Confirmez le PIN</string>
+    <string name="pin_wrong">Mauvais PIN, réessayez.</string>
+    <string name="pin_mismatch">Les PIN ne correspondent pas.</string>
+    <string name="pin_saved">PIN enregistré.</string>
+
+    <string name="p_audio">Audio</string>
+    <string name="p_subs">Sous-titres</string>
+    <string name="p_ratio">Format</string>
+    <string name="p_info">Infos</string>
+    <string name="p_retry">Réessayer</string>
+    <string name="p_back">Retour</string>
+    <string name="p_error">Erreur de lecture</string>
+    <string name="p_nosource">Aucun flux lisible trouvé.</string>
+    <string name="p_unsupported">Format non pris en charge sur Android (%1$s).</string>
+    <string name="p_will_retry">Essai d\'un autre format… (%1$d/%2$d)</string>
+    <string name="p_ch_up">CH+</string>
+    <string name="p_ch_down">CH−</string>
+    <string name="audio_auto">Auto</string>
+    <string name="subs_off">Off</string>
+
+    <string name="err_network">Erreur réseau — vérifiez la connexion et l\'URL.</string>
+    <string name="err_auth">Échec d\'authentification — vérifiez identifiants.</string>
+    <string name="err_unknown">Une erreur est survenue.</string>
+</resources>

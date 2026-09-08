@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RGBTv</string>
+
+    <!-- Profiles -->
+    <string name="who_watching">Who\'s watching?</string>
+    <string name="add_profile">Add Profile</string>
+    <string name="switch_profile">Switch profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="delete_profile">Delete profile</string>
+    <string name="delete_confirm">Delete this profile and its local data?</string>
+    <string name="yes_delete">Yes, delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="test">Test connection</string>
+    <string name="testing">Testing…</string>
+    <string name="connecting">Connecting…</string>
+    <string name="loading">Loading…</string>
+    <string name="retry">Retry</string>
+    <string name="no_profiles">No profiles yet — add your first server.</string>
+
+    <!-- Account form -->
+    <string name="acc_type">Server type</string>
+    <string name="type_xtream">Xtream Codes</string>
+    <string name="type_stalker">Stalker Portal</string>
+    <string name="type_m3u">M3U Playlist</string>
+    <string name="f_name">Profile name</string>
+    <string name="f_url">Server URL</string>
+    <string name="f_user">Username</string>
+    <string name="f_pass">Password</string>
+    <string name="f_mac">MAC address</string>
+    <string name="f_epg">EPG URL (optional XMLTV)</string>
+    <string name="new_mac">New MAC</string>
+    <string name="getphp_hint">Tip: an Xtream “get.php” link is detected automatically and upgraded to the faster API login.</string>
+    <string name="fill_all">Please fill server URL, username and password.</string>
+    <string name="fill_url">Please enter the playlist URL.</string>
+    <string name="expires">Expires</string>
+    <string name="status">Status</string>
+    <string name="active">Active</string>
+    <string name="unlimited">Unlimited</string>
+
+    <!-- Home -->
+    <string name="live_tv">Live TV</string>
+    <string name="movies">Movies</string>
+    <string name="series">Series</string>
+    <string name="guide">TV Guide</string>
+    <string name="search">Search</string>
+    <string name="my_list">My List</string>
+    <string name="settings">Settings</string>
+    <string name="continue_watching">Continue watching</string>
+    <string name="favorites">Favorites</string>
+    <string name="channels_d">%1$d channels</string>
+    <string name="items_d">%1$d items</string>
+
+    <!-- Browse -->
+    <string name="all">All</string>
+    <string name="filter_hint">Filter…</string>
+    <string name="sort">Sort</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_added">Recently added</string>
+    <string name="sort_num">Number</string>
+    <string name="no_results">Nothing found.</string>
+    <string name="now">Now</string>
+    <string name="next">Next</string>
+    <string name="no_epg">No program info</string>
+    <string name="live_badge">LIVE</string>
+    <string name="locked">Locked</string>
+    <string name="adult_locked">Locked (18+). Enter PIN.</string>
+
+    <!-- Detail -->
+    <string name="play">Play</string>
+    <string name="play_s1e1">Play S1:E1</string>
+    <string name="resume">Resume</string>
+    <string name="add_fav">My List</string>
+    <string name="remove_fav">Remove</string>
+    <string name="added_fav">Added to My List</string>
+    <string name="removed_fav">Removed from My List</string>
+    <string name="season">Season %1$d</string>
+    <string name="episode_n">E%1$d</string>
+    <string name="episode_full">Episode %1$d</string>
+    <string name="watched">Watched</string>
+    <string name="up_next">Up next</string>
+    <string name="up_next_hint">Playing in %1$ds — BACK cancels</string>
+    <string name="resumed_from">Resumed from %1$s</string>
+
+    <!-- Guide -->
+    <string name="replay">Replay</string>
+    <string name="watch_live">Watch live</string>
+    <string name="past">Ended</string>
+    <string name="future">Upcoming</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search channels, movies, series…</string>
+    <string name="results_d">%1$d results</string>
+
+    <!-- Settings -->
+    <string name="set_account">Current profile</string>
+    <string name="set_account_d">Edit, switch or test connection</string>
+    <string name="set_livefmt">Live stream format</string>
+    <string name="set_livefmt_d">HLS starts safer · TS starts faster</string>
+    <string name="fmt_auto">Auto (recommended)</string>
+    <string name="fmt_hls">HLS (.m3u8)</string>
+    <string name="fmt_ts">MPEG-TS (.ts)</string>
+    <string name="set_lang">Language</string>
+    <string name="lang_system">System</string>
+    <string name="set_accent">Accent color</string>
+    <string name="accent_blue">Blue</string>
+    <string name="accent_green">Green</string>
+    <string name="accent_red">Red</string>
+    <string name="accent_purple">Purple</string>
+    <string name="accent_gold">Gold</string>
+    <string name="set_parental">Parental lock</string>
+    <string name="set_parental_d">Require PIN for locked &amp; adult items</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="set_pin">Change PIN</string>
+    <string name="set_pin_d">4-digit code</string>
+    <string name="set_unlockall">Unlock everything</string>
+    <string name="set_unlockall_d">Clear all locks in this profile</string>
+    <string name="unlocked_all">All locks cleared</string>
+    <string name="set_refresh">Refresh content</string>
+    <string name="set_refresh_d">Clear cache and reload from server</string>
+    <string name="refreshed">Content refreshed</string>
+    <string name="set_about">About</string>
+    <string name="about_text">RGBTv %1$s — native Android IPTV player.\nXtream Codes · Stalker · M3U · XMLTV EPG.\nMade for speed: ExoPlayer + streaming parsers.</string>
+    <string name="set_exit">Exit app</string>
+    <string name="lock_hint">Long-press any channel or poster to lock it.</string>
+    <string name="locked_item">Locked</string>
+    <string name="unlocked_item">Unlocked</string>
+
+    <!-- PIN -->
+    <string name="pin_title">Enter PIN</string>
+    <string name="pin_new">Choose a new PIN</string>
+    <string name="pin_confirm">Confirm the PIN</string>
+    <string name="pin_wrong">Wrong PIN, try again.</string>
+    <string name="pin_mismatch">PINs don\'t match.</string>
+    <string name="pin_saved">PIN saved.</string>
+
+    <!-- Player -->
+    <string name="p_audio">Audio</string>
+    <string name="p_subs">Subs</string>
+    <string name="p_ratio">Aspect</string>
+    <string name="p_info">Info</string>
+    <string name="p_retry">Retry</string>
+    <string name="p_back">Back</string>
+    <string name="p_error">Playback error</string>
+    <string name="p_nosource">No playable stream found.</string>
+    <string name="p_unsupported">This format is not supported on Android (%1$s).</string>
+    <string name="p_will_retry">Trying another format… (%1$d/%2$d)</string>
+    <string name="p_ch_up">CH+</string>
+    <string name="p_ch_down">CH−</string>
+    <string name="audio_auto">Auto</string>
+    <string name="subs_off">Off</string>
+
+    <!-- Errors -->
+    <string name="err_network">Network error — check connection and server URL.</string>
+    <string name="err_auth">Authentication failed — check username/password.</string>
+    <string name="err_unknown">Something went wrong.</string>
+</resources>

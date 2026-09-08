@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.RGBTv" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorOnPrimary">@color/text</item>
+        <item name="colorSecondary">@color/accent_blue</item>
+        <item name="android:colorBackground">@color/bg</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:statusBarColor">@color/bg</item>
+        <item name="android:navigationBarColor">@color/bg</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Overlay.Accent.Blue" parent="">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorSecondary">@color/accent_blue</item>
+    </style>
+    <style name="Overlay.Accent.Green" parent="">
+        <item name="colorPrimary">@color/accent_green</item>
+        <item name="colorSecondary">@color/accent_green</item>
+    </style>
+    <style name="Overlay.Accent.Red" parent="">
+        <item name="colorPrimary">@color/accent_red</item>
+        <item name="colorSecondary">@color/accent_red</item>
+    </style>
+    <style name="Overlay.Accent.Purple" parent="">
+        <item name="colorPrimary">@color/accent_purple</item>
+        <item name="colorSecondary">@color/accent_purple</item>
+    </style>
+    <style name="Overlay.Accent.Gold" parent="">
+        <item name="colorPrimary">@color/accent_gold</item>
+        <item name="colorSecondary">@color/accent_gold</item>
+    </style>
+</resources>
