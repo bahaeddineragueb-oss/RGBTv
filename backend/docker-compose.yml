@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: rgbtv
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-rgbtv-secret}
+      POSTGRES_DB: rgbtv
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://rgbtv:${DB_PASSWORD:-rgbtv-secret}@db:5432/rgbtv
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+volumes:
+  pgdata:

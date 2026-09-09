@@ -29,6 +29,7 @@ import com.rgbtv.app.data.EpisodeItem
 import com.rgbtv.app.data.HistItem
 import com.rgbtv.app.data.LiveCh
 import com.rgbtv.app.data.Store
+import com.rgbtv.app.repo.Library
 import com.rgbtv.app.data.VodDetail
 import com.rgbtv.app.data.VodItem
 import com.rgbtv.app.databinding.ActivityPlayerBinding
@@ -419,7 +420,8 @@ class PlayerActivity : AppCompatActivity() {
             "episode" -> {
                 curEp?.let {
                     Store.markDone(accId, "ep:${it.id}")
-                    Store.clearPos(accId, "ep:${it.id}")
+                    val epId = it.id
+                    lifecycleScope.launch { Library.clearPos(this@PlayerActivity, accId, "ep:$epId") }
                 }
                 if (Store.settings().autoNext && nextEps.isNotEmpty()) startCountdown()
                 else finish()
@@ -427,7 +429,7 @@ class PlayerActivity : AppCompatActivity() {
             "vod" -> {
                 try {
                     val v = VodItem.fromJson(JSONObject(itemJson))
-                    Store.clearPos(accId, "movie:${v.id}")
+                    lifecycleScope.launch { Library.clearPos(this@PlayerActivity, accId, "movie:${v.id}") }
                 } catch (e: Exception) { }
                 finish()
             }
@@ -451,7 +453,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun pushHistory() {
         try {
-            Store.pushHistory(accId, HistItem(histType(), histId(), title, img, itemJson))
+            lifecycleScope.launch { Library.pushHistory(this@PlayerActivity, accId, HistItem(histType(), histId(), title, img, itemJson)) }
         } catch (e: Exception) { }
     }
 
@@ -482,7 +484,7 @@ class PlayerActivity : AppCompatActivity() {
         if (k.isEmpty() || pl == null) return
         val pos = pl.currentPosition
         val dur = pl.duration.takeIf { it > 0 } ?: 0
-        if (pos > 5000) Store.setPos(accId, k, pos, dur)
+        if (pos > 5000) lifecycleScope.launch { Library.setPos(this@PlayerActivity, accId, k, pos, dur) }
     }
 
     /* ---------- audio / subs / ratio / info ---------- */

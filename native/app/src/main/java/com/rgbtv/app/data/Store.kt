@@ -132,6 +132,8 @@ object Store {
     fun locks(accId: String): MutableSet<String> =
         prefs.getStringSet("lock_$accId", emptySet())?.toMutableSet() ?: mutableSetOf()
     fun isLocked(accId: String, key: String): Boolean = locks(accId).contains(key)
+    fun isLocked(accId: String, type: String, id: String): Boolean = isLocked(accId, "$type:$id")
+    fun toggleLock(accId: String, type: String, id: String): Boolean = toggleLock(accId, "$type:$id")
     fun toggleLock(accId: String, key: String): Boolean {
         val s = locks(accId)
         val now = if (s.contains(key)) { s.remove(key); false } else { s.add(key); true }

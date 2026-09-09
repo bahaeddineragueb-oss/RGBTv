@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RGBTv Admin</title>
+<style>
+  * { box-sizing: border-box; font-family: system-ui, sans-serif; }
+  body { background: #07080C; color: #fff; margin: 0; padding: 24px; }
+  h1 { font-size: 22px; } h1 span { color: #3B82F6; }
+  .card { background: #151821; border: 1px solid #252A36; border-radius: 12px; padding: 16px; margin: 12px 0; }
+  input, button { padding: 10px 14px; border-radius: 8px; border: 1px solid #252A36; font-size: 14px; }
+  input { background: #0E1016; color: #fff; width: 240px; margin: 4px; }
+  button { background: #3B82F6; color: #fff; border: 0; cursor: pointer; margin: 4px; }
+  button.ghost { background: #1C202B; }
+  button.red { background: #EF4444; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #252A36; }
+  .stats { display: flex; gap: 12px; }
+  .stat { flex: 1; text-align: center; }
+  .stat b { font-size: 26px; display: block; color: #3B82F6; }
+  #err { color: #EF4444; }
+</style>
+</head>
+<body>
+<h1>RGBTv <span>Admin</span></h1>
+<div id="login" class="card">
+  <input id="email" type="email" placeholder="admin email">
+  <input id="pass" type="password" placeholder="password">
+  <button onclick="login()">Login</button>
+  <div id="err"></div>
+</div>
+<div id="dash" style="display:none">
+  <div class="card stats">
+    <div class="stat"><b id="sUsers">–</b>users</div>
+    <div class="stat"><b id="sProf">–</b>profiles</div>
+    <div class="stat"><b id="sFav">–</b>favorites</div>
+  </div>
+  <div class="card">
+    <input id="q" placeholder="search users..." oninput="loadUsers()">
+    <button class="ghost" onclick="loadUsers()">Refresh</button>
+    <button class="ghost" onclick="logout()">Logout</button>
+    <table><thead><tr><th>ID</th><th>Email</th><th>Name</th><th>Profiles</th><th>Admin</th><th>Disabled</th><th></th></tr></thead>
+    <tbody id="rows"></tbody></table>
+  </div>
+</div>
+<script>
+let tok = localStorage.getItem('rgbtv_admin') || '';
+const api = (m, u, b) => fetch(u, { method: m, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: b ? JSON.stringify(b) : undefined }).then(r => r.json());
+async function login() {
+  const r = await api('POST', '/api/auth/login', { email: email.value, password: pass.value });
+  if (!r.token) { err.textContent = r.error || 'failed'; return; }
+  if (!r.user.admin) { err.textContent = 'not an admin'; return; }
+  tok = r.token; localStorage.setItem('rgbtv_admin', tok); show();
+}
+function logout() { tok = ''; localStorage.removeItem('rgbtv_admin'); location.reload(); }
+async function show() {
+  login.style.display = 'none'; dash.style.display = 'block';
+  const s = await api('GET', '/api/admin/stats');
+  sUsers.textContent = s.users; sProf.textContent = s.profiles; sFav.textContent = s.favs;
+  loadUsers();
+}
+async function loadUsers() {
+  const r = await api('GET', '/api/admin/users?q=' + encodeURIComponent(q.value || ''));
+  rows.innerHTML = (r.users || []).map(u => `<tr><td>${u.id}</td><td>${u.email}</td><td>${u.name || ''}</td><td>${u.profiles}</td><td>${u.admin ? '✓' : ''}</td><td>${u.disabled ? '⛔' : ''}</td><td>
+    <button class="ghost" onclick="toggleAdmin(${u.id},${!u.admin})">${u.admin ? 'unadmin' : 'admin'}</button>
+    <button class="${u.disabled ? 'ghost' : 'red'}" onclick="toggleDis(${u.id},${!u.disabled})">${u.disabled ? 'enable' : 'disable'}</button></td></tr>`).join('');
+}
+async function toggleAdmin(id, v) { await api('POST', `/api/admin/users/${id}/admin`, { admin: v }); loadUsers(); }
+async function toggleDis(id, v) { await api('POST', `/api/admin/users/${id}/disable`, { disabled: v }); loadUsers(); }
+if (tok) show();
+</script>
+</body>
+</html>
