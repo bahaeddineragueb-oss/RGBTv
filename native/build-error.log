@@ -25,17 +25,17 @@ Starting a Gradle Daemon (subsequent builds will be faster)
 > Task :app:generateReleaseResValues
 > Task :app:generateReleaseResources
 > Task :app:packageReleaseResources
-> Task :app:mapReleaseSourceSetPaths
-> Task :app:parseReleaseLocalResources
-> Task :app:createReleaseCompatibleScreenManifests
 > Task :app:checkReleaseAarMetadata
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:createReleaseCompatibleScreenManifests
 > Task :app:extractDeepLinksRelease
+> Task :app:parseReleaseLocalResources
 > Task :app:processReleaseMainManifest
 > Task :app:processReleaseManifest
 > Task :app:processReleaseManifestForPackage
 > Task :app:javaPreCompileRelease
-> Task :app:mergeReleaseArtProfile
 > Task :app:extractProguardFiles
+> Task :app:mergeReleaseArtProfile
 > Task :app:mergeReleaseStartupProfile
 > Task :app:mergeReleaseShaders
 > Task :app:compileReleaseShaders NO-SOURCE
@@ -60,8 +60,8 @@ FAILURE: Build failed with an exception.
 Execution failed for task ':app:processReleaseResources'.
 > A failure occurred while executing com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask$TaskAction
    > Android resource linking failed
-     com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:89: error: resource style/Widget.Material3.Button.FilledTonalIconButton (aka com.rgbtv.app:style/Widget.Material3.Button.FilledTonalIconButton) not found.
-     com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:97: error: resource style/Widget.Material3.Button.FilledTonalIconButton (aka com.rgbtv.app:style/Widget.Material3.Button.FilledTonalIconButton) not found.
+     com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:89: error: resource style/Widget.Material3.IconButton.FilledTonal (aka com.rgbtv.app:style/Widget.Material3.IconButton.FilledTonal) not found.
+     com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:97: error: resource style/Widget.Material3.IconButton.FilledTonal (aka com.rgbtv.app:style/Widget.Material3.IconButton.FilledTonal) not found.
      error: failed linking file resources.
 
 
@@ -235,8 +235,8 @@ Caused by: org.gradle.workers.internal.DefaultWorkerExecutor$WorkExecutionExcept
 	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
 	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
 Caused by: com.android.builder.internal.aapt.v2.Aapt2Exception: Android resource linking failed
-com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:89: error: resource style/Widget.Material3.Button.FilledTonalIconButton (aka com.rgbtv.app:style/Widget.Material3.Button.FilledTonalIconButton) not found.
-com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:97: error: resource style/Widget.Material3.Button.FilledTonalIconButton (aka com.rgbtv.app:style/Widget.Material3.Button.FilledTonalIconButton) not found.
+com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:89: error: resource style/Widget.Material3.IconButton.FilledTonal (aka com.rgbtv.app:style/Widget.Material3.IconButton.FilledTonal) not found.
+com.rgbtv.app-mergeReleaseResources-40:/layout/fragment_home.xml:97: error: resource style/Widget.Material3.IconButton.FilledTonal (aka com.rgbtv.app:style/Widget.Material3.IconButton.FilledTonal) not found.
 error: failed linking file resources.
 
 	at com.android.builder.internal.aapt.v2.Aapt2Exception$Companion.create(Aapt2Exception.kt:45)
@@ -336,5 +336,5 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD FAILED in 56s
+BUILD FAILED in 54s
 31 actionable tasks: 31 executed
