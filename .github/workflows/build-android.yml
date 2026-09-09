@@ -78,6 +78,17 @@ jobs:
           "$(dirname "$AAPT")/apksigner" verify RGBTv-native-5.0.0.apk && echo "signature OK"
           test $(stat -c%s RGBTv-native-5.0.0.apk) -gt 1000000 && echo "size OK"
 
+      - name: Report errors
+        if: failure()
+        run: |
+          if [ -f build.log ]; then
+            grep -a "e: " build.log | head -20 | sed 's/%/%25/g' | cut -c1-400 | sed 's/^/::error::/'
+            grep -a -A6 "What went wrong" build.log | head -14 | tr '\n' ' ' | sed 's/%/%25/g' | cut -c1-500 | sed 's/^/::error::/'
+          else
+            echo "::error::no build.log produced"
+          fi
+          echo done
+
       - name: Upload build log on failure
         if: failure()
         uses: actions/upload-artifact@v4
