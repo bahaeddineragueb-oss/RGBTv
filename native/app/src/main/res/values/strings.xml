@@ -195,9 +195,6 @@
     <string name="delete">Delete</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="pin_new">Enter new PIN</string>
-    <string name="pin_confirm">Confirm PIN</string>
-    <string name="pin_mismatch">PINs don\'t match</string>
     <string name="done">Done</string>
     <string name="cloud_title">Cloud sync</string>
     <string name="cloud_login">Log in to cloud</string>
@@ -209,7 +206,6 @@
     <string name="admin">Admin</string>
     <string name="sort_default">Default</string>
     <string name="sort_az">A–Z</string>
-    <string name="sort_added">Newest</string>
     <string name="sort_rating">Rating</string>
     <string name="details">Details</string>
     <string name="favorite">Favorite</string>
@@ -221,7 +217,6 @@
     <string name="clear_cache">Clear image cache</string>
     <string name="clear_history">Clear history</string>
     <string name="acc_name">Name</string>
-    <string name="acc_type">Type</string>
     <string name="acc_url">Server URL</string>
     <string name="acc_user">Username</string>
     <string name="acc_pass">Password</string>

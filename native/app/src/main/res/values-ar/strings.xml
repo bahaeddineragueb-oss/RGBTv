@@ -184,9 +184,6 @@
     <string name="delete">حذف</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
-    <string name="pin_new">أدخل رقماً سرياً جديداً</string>
-    <string name="pin_confirm">تأكيد الرقم السري</string>
-    <string name="pin_mismatch">الرقمان غير متطابقين</string>
     <string name="done">تم</string>
     <string name="cloud_title">المزامنة السحابية</string>
     <string name="cloud_login">تسجيل الدخول للسحابة</string>
@@ -198,7 +195,6 @@
     <string name="admin">مشرف</string>
     <string name="sort_default">افتراضي</string>
     <string name="sort_az">أ–ي</string>
-    <string name="sort_added">الأحدث</string>
     <string name="sort_rating">التقييم</string>
     <string name="details">التفاصيل</string>
     <string name="favorite">مفضلة</string>
@@ -210,7 +206,6 @@
     <string name="clear_cache">مسح ذاكرة الصور</string>
     <string name="clear_history">مسح السجل</string>
     <string name="acc_name">الاسم</string>
-    <string name="acc_type">النوع</string>
     <string name="acc_url">رابط السيرفر</string>
     <string name="acc_user">اسم المستخدم</string>
     <string name="acc_pass">كلمة المرور</string>
