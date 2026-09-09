@@ -108,7 +108,7 @@ fun GuideScreen(nav: Navigator) {
 
     suspend fun play(ch: LiveCh) {
         if (Store.isLocked(accId, "live", ch.id) || (Store.settings().parental && Kit.isAdult(ch.name))) {
-            val ok = gate.askPin(accId, ctx.getString(R.string.pin_title))
+            val ok = gate.askPin(ctx.getString(R.string.pin_title))
             if (!ok) return
         }
         PlayerActivity.playLive(ctx, ch, rows.map { it.ch })

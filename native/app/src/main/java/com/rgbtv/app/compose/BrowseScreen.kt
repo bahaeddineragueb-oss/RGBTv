@@ -184,7 +184,7 @@ fun BrowseScreen(nav: Navigator, mode: Int) {
 
     suspend fun openLive(ch: LiveCh) {
         if (Store.isLocked(accId, "live", ch.id) || (Store.settings().parental && Kit.isAdult(ch.name))) {
-            val ok = gate.askPin(accId, ctx.getString(R.string.pin_title))
+            val ok = gate.askPin(ctx.getString(R.string.pin_title))
             if (!ok) return
         }
         PlayerActivity.playLive(ctx, ch, shownLive)
@@ -258,9 +258,8 @@ fun BrowseScreen(nav: Navigator, mode: Int) {
                             scope.launch {
                                 try {
                                     Repository.sessionFor(Store.getAccount(accId)!!)
-                                    val eps = Repository.provider?.episodes(s.id).orEmpty()
-                                    val first = eps.firstOrNull()?.second?.firstOrNull()
-                                    if (first != null) scope.goEp(ctx, gate, accId, s.name, listOf(first), 0)
+                                    val seas = Repository.provider?.seriesInfo(s)?.seasons?.firstOrNull()
+                                    if (seas != null && seas.episodes.isNotEmpty()) scope.goEp(ctx, gate, accId, s.name, seas.episodes, 0)
                                     else nav.open(Screen.Detail("series", s.toJson().toString()))
                                 } catch (e: Exception) { Ui.toast(ctx, Net.userMsg(ctx, e)) }
                             }
