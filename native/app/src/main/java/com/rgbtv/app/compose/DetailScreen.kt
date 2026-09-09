@@ -165,7 +165,7 @@ fun DetailScreen(nav: Navigator, type: String, data: String) {
 
     Box(Modifier.fillMaxSize().background(Cine.bg)) {
         AsyncImage(
-            model = bgImg.ifEmpty { null },
+            model = bgImg?.ifEmpty { null },
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize().alpha(0.25f)

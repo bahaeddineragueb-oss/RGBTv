@@ -36,7 +36,6 @@ fun Modifier.tvFocus(
         .graphicsLayer {
             scaleX = s
             scaleY = s
-            translationZ = if (focused) 8f else 0f
         }
         .onFocusChanged {
             focused = it.isFocused
