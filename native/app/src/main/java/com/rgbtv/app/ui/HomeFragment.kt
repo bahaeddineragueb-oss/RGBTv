@@ -1,6 +1,8 @@
 package com.rgbtv.app.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +25,13 @@ import com.rgbtv.app.repo.Repository
 import com.rgbtv.app.ui.Ui.main
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HomeFragment : Fragment() {
     private var b: FragmentHomeBinding? = null
+    private val ui = Handler(Looper.getMainLooper())
     private lateinit var tiles: TileAdapter
     private lateinit var railC: PosterAdapter
     private lateinit var railF: PosterAdapter
@@ -50,16 +56,33 @@ class HomeFragment : Fragment() {
         b.railFavs.adapter = railF
         tiles = TileAdapter(onClick = { openTile(it) })
         b.tiles.adapter = tiles
-        b.btnSearch.setOnClickListener { main().open(SearchFragment()) }
+        b.bannerSearch.setOnClickListener { main().open(SearchFragment()) }
+        b.bannerMylist.setOnClickListener { main().open(MyListFragment()) }
+        Ui.focusScale(b.bannerSearch)
+        Ui.focusScale(b.bannerMylist)
+        b.btnSwitch.setOnClickListener { main().profiles() }
         b.btnSettings.setOnClickListener { main().open(SettingsFragment()) }
         b.btnRetry.setOnClickListener { load() }
-        b.btnSwitch.setOnClickListener { main().profiles() }
+        b.btnSwitchErr.setOnClickListener { main().profiles() }
+        tickClock()
         load()
     }
 
     override fun onResume() {
         super.onResume()
         if (b?.scroll?.visibility == View.VISIBLE) renderRails()
+    }
+
+    private val clockTick = object : Runnable {
+        override fun run() {
+            b?.clockText?.text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+            ui.postDelayed(this, 30000)
+        }
+    }
+
+    private fun tickClock() {
+        ui.removeCallbacks(clockTick)
+        ui.post(clockTick)
     }
 
     private fun acc(): Account? =
@@ -108,14 +131,10 @@ class HomeFragment : Fragment() {
     private fun renderTiles() {
         tiles.setData(
             listOf(
-                TileRow("📺", getString(R.string.live_tv), if (liveCount >= 0) getString(R.string.channels_d, liveCount) else ""),
-                TileRow("🎬", getString(R.string.movies)),
-                TileRow("🎭", getString(R.string.series)),
-                TileRow("📖", getString(R.string.guide)),
-                TileRow("🔍", getString(R.string.search)),
-                TileRow("⭐", getString(R.string.my_list)),
-                TileRow("⚙", getString(R.string.settings)),
-                TileRow("👥", getString(R.string.switch_profile))
+                TileRow("📺", getString(R.string.live_tv), if (liveCount >= 0) getString(R.string.channels_d, liveCount) else "", 0),
+                TileRow("🎬", getString(R.string.movies), "", 1),
+                TileRow("🎭", getString(R.string.series), "", 2),
+                TileRow("📖", getString(R.string.guide), "", 3)
             )
         )
     }
@@ -151,10 +170,6 @@ class HomeFragment : Fragment() {
             1 -> main().open(BrowseFragment.forMode(BrowseFragment.MODE_VOD))
             2 -> main().open(BrowseFragment.forMode(BrowseFragment.MODE_SERIES))
             3 -> main().open(GuideFragment())
-            4 -> main().open(SearchFragment())
-            5 -> main().open(MyListFragment())
-            6 -> main().open(SettingsFragment())
-            7 -> main().profiles()
         }
     }
 
@@ -224,6 +239,7 @@ class HomeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        ui.removeCallbacks(clockTick)
         b = null
         super.onDestroyView()
     }

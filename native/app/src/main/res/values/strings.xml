@@ -156,4 +156,13 @@
     <string name="err_network">Network error — check connection and server URL.</string>
     <string name="err_auth">Authentication failed — check username/password.</string>
     <string name="err_unknown">Something went wrong.</string>
+    <string name="connected">Connected</string>
+    <string name="banner_search_t">Global Search</string>
+    <string name="banner_search_s">Search channels, movies &amp; series</string>
+    <string name="banner_mylist_t">My List</string>
+    <string name="banner_mylist_s">Favorites &amp; watch history</string>
+    <string name="badge_quality">Premium Quality</string>
+    <string name="badge_secure">100% Secure</string>
+    <string name="badge_fast">Fast &amp; Stable</string>
+    <string name="badge_support">Always Here</string>
 </resources>

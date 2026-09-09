@@ -145,4 +145,13 @@
     <string name="err_network">Erreur réseau — vérifiez la connexion et l\'URL.</string>
     <string name="err_auth">Échec d\'authentification — vérifiez identifiants.</string>
     <string name="err_unknown">Une erreur est survenue.</string>
+    <string name="connected">Connecté</string>
+    <string name="banner_search_t">Recherche globale</string>
+    <string name="banner_search_s">Chaînes, films et séries</string>
+    <string name="banner_mylist_t">Ma Liste</string>
+    <string name="banner_mylist_s">Favoris et historique</string>
+    <string name="badge_quality">Qualité premium</string>
+    <string name="badge_secure">100% sécurisé</string>
+    <string name="badge_fast">Rapide et stable</string>
+    <string name="badge_support">Toujours là</string>
 </resources>

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
+    android:background="@drawable/bg_app"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="24dp">
@@ -12,14 +12,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="RGBTv"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/neon_cyan"
         android:textSize="40sp"
         android:textStyle="bold" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/chip_bg"
+        android:paddingStart="12dp"
+        android:paddingTop="3dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="3dp"
+        android:text="PREMIUM"
+        android:textColor="@color/neon_gold"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:layout_marginBottom="24dp"
         android:text="@string/who_watching"
         android:textColor="@color/text"

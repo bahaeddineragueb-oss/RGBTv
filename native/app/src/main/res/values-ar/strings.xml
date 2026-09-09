@@ -145,4 +145,13 @@
     <string name="err_network">خطأ في الشبكة — تحقق من الاتصال ورابط السيرفر.</string>
     <string name="err_auth">فشل الدخول — تحقق من اسم المستخدم وكلمة المرور.</string>
     <string name="err_unknown">حدث خطأ ما.</string>
+    <string name="connected">متصل</string>
+    <string name="banner_search_t">بحث شامل</string>
+    <string name="banner_search_s">ابحث في القنوات والأفلام والمسلسلات</string>
+    <string name="banner_mylist_t">قائمتي</string>
+    <string name="banner_mylist_s">المفضلة وسجل المشاهدة</string>
+    <string name="badge_quality">جودة بريميوم</string>
+    <string name="badge_secure">آمن 100%</string>
+    <string name="badge_fast">سريع ومستقر</string>
+    <string name="badge_support">دعم متواصل</string>
 </resources>

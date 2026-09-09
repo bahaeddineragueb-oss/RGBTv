@@ -2,10 +2,15 @@
 <resources>
     <color name="bg">#0B0F19</color>
     <color name="bg2">#0E1422</color>
+    <color name="bg_top">#0D1330</color>
+    <color name="bg_bottom">#04060D</color>
     <color name="surface">#141A29</color>
     <color name="card">#1A2233</color>
     <color name="card2">#222C42</color>
+    <color name="glass">#141B2E</color>
+    <color name="glass2">#1E2947</color>
     <color name="line">#26314A</color>
+    <color name="line2">#2E3A5C</color>
     <color name="text">#F2F5FA</color>
     <color name="sub">#9AA3B2</color>
     <color name="dim">#5E6B85</color>
@@ -17,6 +22,14 @@
     <color name="accent_red">#E5484D</color>
     <color name="accent_purple">#9B5CF6</color>
     <color name="accent_gold">#E8B33D</color>
+    <color name="neon_cyan">#00E5FF</color>
+    <color name="neon_blue">#40C4FF</color>
+    <color name="neon_magenta">#E040FB</color>
+    <color name="neon_purple">#B537F2</color>
+    <color name="neon_green">#00E676</color>
+    <color name="neon_orange">#FF9100</color>
+    <color name="neon_gold">#FFD740</color>
+    <color name="neon_red">#FF5252</color>
     <color name="placeholder">#1B2334</color>
     <color name="scrim">#CC0B0F19</color>
 </resources>

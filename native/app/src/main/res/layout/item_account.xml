@@ -7,11 +7,13 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
+    android:minHeight="170dp"
     android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -20,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="👤"
-            android:textSize="44sp" />
+            android:textSize="48sp" />
 
         <TextView
             android:id="@+id/name"
@@ -39,8 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="14sp" />
+            android:textColor="@color/neon_cyan"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/sub"
