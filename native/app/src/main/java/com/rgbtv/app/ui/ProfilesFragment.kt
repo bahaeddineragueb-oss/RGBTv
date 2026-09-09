@@ -44,6 +44,7 @@ class ProfilesFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (requireActivity() as MainActivity).select("profiles")
         load()
     }
 

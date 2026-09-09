@@ -310,6 +310,7 @@ class BrowseFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (requireActivity() as MainActivity).select(when (mode) { MODE_VOD -> "movies" MODE_SERIES -> "series" else -> "live" })
         // locks may have changed elsewhere
         if (b != null && chAdapter != null) {
             val l = chAdapter!!.currentList

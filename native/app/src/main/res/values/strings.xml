@@ -165,4 +165,5 @@
     <string name="badge_secure">100% Secure</string>
     <string name="badge_fast">Fast &amp; Stable</string>
     <string name="badge_support">Always Here</string>
+    <string name="nav_home">Home</string>
 </resources>

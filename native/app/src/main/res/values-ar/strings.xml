@@ -154,4 +154,5 @@
     <string name="badge_secure">آمن 100%</string>
     <string name="badge_fast">سريع ومستقر</string>
     <string name="badge_support">دعم متواصل</string>
+    <string name="nav_home">الرئيسية</string>
 </resources>

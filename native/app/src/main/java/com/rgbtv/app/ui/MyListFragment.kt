@@ -126,4 +126,9 @@ class MyListFragment : Fragment() {
         b = null
         super.onDestroyView()
     }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).select("mylist")
+    }
 }

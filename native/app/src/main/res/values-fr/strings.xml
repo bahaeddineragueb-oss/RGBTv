@@ -154,4 +154,5 @@
     <string name="badge_secure">100% sécurisé</string>
     <string name="badge_fast">Rapide et stable</string>
     <string name="badge_support">Toujours là</string>
+    <string name="nav_home">Accueil</string>
 </resources>

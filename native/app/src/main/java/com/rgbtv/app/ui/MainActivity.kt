@@ -1,7 +1,9 @@
 package com.rgbtv.app.ui
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.rgbtv.app.R
@@ -10,8 +12,10 @@ import com.rgbtv.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var b: ActivityMainBinding
+    private var selKey = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         when (Store.settings().accent) {
             "green" -> setTheme(R.style.Overlay_Accent_Green)
@@ -22,10 +26,52 @@ class MainActivity : AppCompatActivity() {
         }
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
+        navItems().forEach { (k, v) -> v.setOnClickListener { nav(k) } }
+        selKey = savedInstanceState?.getString("nav") ?: ""
         if (savedInstanceState == null) {
-            if (Store.accounts().isEmpty()) open(ProfilesFragment(), false)
-            else open(HomeFragment(), false)
+            if (Store.accounts().isEmpty()) nav("profiles")
+            else nav("home")
+        } else paintNav()
+    }
+
+    override fun onSaveInstanceState(out: Bundle) {
+        super.onSaveInstanceState(out)
+        out.putString("nav", selKey)
+    }
+
+    private fun navItems(): Map<String, TextView> = mapOf(
+        "home" to b.navHome, "live" to b.navLive, "movies" to b.navMovies,
+        "series" to b.navSeries, "guide" to b.navGuide, "search" to b.navSearch,
+        "mylist" to b.navMylist, "settings" to b.navSettings, "profiles" to b.navProfiles
+    )
+
+    /** Top-level navigation: clears the stack, swaps content, marks the sidebar. */
+    fun nav(key: String) {
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        val f: Fragment = when (key) {
+            "live" -> BrowseFragment.forMode(BrowseFragment.MODE_LIVE)
+            "movies" -> BrowseFragment.forMode(BrowseFragment.MODE_VOD)
+            "series" -> BrowseFragment.forMode(BrowseFragment.MODE_SERIES)
+            "guide" -> GuideFragment()
+            "search" -> SearchFragment()
+            "mylist" -> MyListFragment()
+            "settings" -> SettingsFragment()
+            "profiles" -> ProfilesFragment()
+            else -> HomeFragment()
         }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, f)
+            .commit()
+        select(key)
+    }
+
+    fun select(key: String) {
+        selKey = key
+        if (::b.isInitialized) paintNav()
+    }
+
+    private fun paintNav() {
+        navItems().forEach { (k, v) -> v.isSelected = (k == selKey) }
     }
 
     fun open(f: Fragment, back: Boolean = true) {
@@ -35,13 +81,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun home() {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        open(HomeFragment(), false)
-    }
+    fun home() = nav("home")
 
-    fun profiles() {
-        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        open(ProfilesFragment(), false)
-    }
+    fun profiles() = nav("profiles")
 }

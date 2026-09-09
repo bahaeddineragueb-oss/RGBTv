@@ -1,6 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/container"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_app" />
+    android:background="@drawable/bg_app"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:background="#0E0E12"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="RGBTv"
+            android:textColor="@color/text"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/line" />
+
+        <TextView
+            android:id="@+id/navHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/nav_home"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navLive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/live_tv"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navMovies"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/movies"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/series"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/guide"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/search"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navMylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/my_list"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navSettings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/settings"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/navProfiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/nav_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="14dp"
+            android:text="@string/switch_profile"
+            android:textColor="@color/nav_text"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/line" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+</LinearLayout>

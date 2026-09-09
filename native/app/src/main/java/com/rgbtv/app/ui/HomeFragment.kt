@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        (requireActivity() as MainActivity).select("home")
         if (b?.scroll?.visibility == View.VISIBLE) renderRails()
     }
 

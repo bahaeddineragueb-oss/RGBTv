@@ -151,4 +151,9 @@ class SearchFragment : Fragment() {
         b = null
         super.onDestroyView()
     }
+
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as MainActivity).select("search")
+    }
 }
