@@ -22,6 +22,8 @@ class MyListFragment : Fragment() {
     private lateinit var favAdapter: PosterAdapter
     private lateinit var histAdapter: PosterAdapter
     private var favs: List<FavItem> = emptyList()
+    private var favsShown: List<FavItem> = emptyList()
+    private var favTab = 0
     private var hist: List<HistItem> = emptyList()
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View {
@@ -55,20 +57,30 @@ class MyListFragment : Fragment() {
         val b = b ?: return
         favs = Store.favs(accId())
         hist = Store.history(accId())
-        favAdapter.submitList(favs.map { f -> PosterRow("f:${f.type}:${f.id}", f.img, f.name) })
+        favsShown = when (favTab) {
+            1 -> favs.filter { it.type == "live" }
+            2 -> favs.filter { it.type == "movie" }
+            3 -> favs.filter { it.type == "series" || it.type == "episode" }
+            else -> favs
+        }
+        b.fAll.isSelected = favTab == 0
+        b.fLive.isSelected = favTab == 1
+        b.fVod.isSelected = favTab == 2
+        b.fSeries.isSelected = favTab == 3
+        favAdapter.submitList(favsShown.map { f -> PosterRow("f:${f.type}:${f.id}", f.img, f.name) })
         histAdapter.submitList(hist.map { h ->
             val p = Store.getPos(accId(), if (h.type == "movie") "movie:${h.id}" else "ep:${h.id}")
             val pct = if (p != null && p.dur > 0) (p.pos * 100 / p.dur).toInt() else -1
             PosterRow("h:${h.type}:${h.id}", h.img, h.name, Ui.dateFull(h.at), pct)
         })
-        b.emptyFavs.visibility = if (favs.isEmpty()) View.VISIBLE else View.GONE
+        b.emptyFavs.visibility = if (favsShown.isEmpty()) View.VISIBLE else View.GONE
         b.emptyHist.visibility = if (hist.isEmpty()) View.VISIBLE else View.GONE
         Ui.autoSpan(b.gridFavs, 155)
         Ui.autoSpan(b.gridHist, 155)
     }
 
     private fun openFav(i: Int) {
-        val f = favs.getOrNull(i) ?: return
+        val f = favsShown.getOrNull(i) ?: return
         Guard.run(this, accId(), f.type, f.id, f.name) {
             if (f.type == "series") {
                 main().open(DetailFragment.forItem("series", f.data)); return@run
@@ -94,7 +106,7 @@ class MyListFragment : Fragment() {
     }
 
     private fun removeFav(i: Int) {
-        val f = favs.getOrNull(i) ?: return
+        val f = favsShown.getOrNull(i) ?: return
         Store.toggleFav(accId(), f)
         Ui.toast(context, getString(R.string.removed_fav))
         render()
