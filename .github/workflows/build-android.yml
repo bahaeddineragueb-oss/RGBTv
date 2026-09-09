@@ -106,6 +106,17 @@ jobs:
 
 
 
+      - name: Commit APK to repo
+        run: |
+          cd ..
+          mkdir -p dist
+          cp native/RGBTv-native-5.0.0.apk dist/RGBTv-v5.0.0.apk
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add -f dist/RGBTv-v5.0.0.apk
+          git commit -m "dist: RGBTv v5.0.0 APK" || echo "nothing to commit"
+          git push origin HEAD:${{ github.ref_name }}
+
       - name: Publish GitHub release
         if: github.event_name == 'workflow_dispatch' && inputs.publish_release
         uses: softprops/action-gh-release@v2
