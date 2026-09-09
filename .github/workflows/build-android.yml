@@ -1,13 +1,13 @@
 # Builds the RGBTv NATIVE Android app (.apk, ExoPlayer, no WebView) on a free GitHub runner.
 # Run: Actions → "Build Android APK (native)" → Run workflow → download the APK from Artifacts
-# (or from the "native-v4.1.0" release when publish_release is on).
+# (or from the "native-v5.0.0" release when publish_release is on).
 name: Build Android APK (native)
 
 on:
   workflow_dispatch:
     inputs:
       publish_release:
-        description: 'Publish the APK to release "native-v4.1.0"'
+        description: 'Publish the APK to release "native-v5.0.0"'
         type: boolean
         default: true
   push:
@@ -59,29 +59,37 @@ jobs:
       - name: Build release APK
         run: |
           chmod +x gradlew
-          ./gradlew :app:assembleRelease --stacktrace
+          ./gradlew :app:assembleRelease --stacktrace 2>&1 | tee build.log
+          test ${PIPESTATUS[0]} -eq 0
 
 
 
       - name: Collect APK
         run: |
-          cp app/build/outputs/apk/release/app-release.apk RGBTv-native-4.1.0.apk
-          ls -lh RGBTv-native-4.1.0.apk
+          cp app/build/outputs/apk/release/app-release.apk RGBTv-native-5.0.0.apk
+          ls -lh RGBTv-native-5.0.0.apk
 
       - name: Verify APK
         run: |
           AAPT=$(ls -d "$ANDROID_HOME"/build-tools/*/aapt | sort -V | tail -1)
           echo "aapt: $AAPT"
-          "$AAPT" dump badging RGBTv-native-4.1.0.apk | grep -E "package:|sdkVersion|targetSdkVersion|application-label:"
-          "$AAPT" dump badging RGBTv-native-4.1.0.apk | grep -q "package: name='com.rgbtv.app'"
-          "$(dirname "$AAPT")/apksigner" verify RGBTv-native-4.1.0.apk && echo "signature OK"
-          test $(stat -c%s RGBTv-native-4.1.0.apk) -gt 1000000 && echo "size OK"
+          "$AAPT" dump badging RGBTv-native-5.0.0.apk | grep -E "package:|sdkVersion|targetSdkVersion|application-label:"
+          "$AAPT" dump badging RGBTv-native-5.0.0.apk | grep -q "package: name='com.rgbtv.app'"
+          "$(dirname "$AAPT")/apksigner" verify RGBTv-native-5.0.0.apk && echo "signature OK"
+          test $(stat -c%s RGBTv-native-5.0.0.apk) -gt 1000000 && echo "size OK"
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: native/build.log
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: RGBTv-native-apk
-          path: native/RGBTv-native-4.1.0.apk
+          path: native/RGBTv-native-5.0.0.apk
           if-no-files-found: error
 
 
@@ -91,26 +99,26 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.publish_release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: native-v4.1.0
-          name: 'RGBTv 4.1.0 — Android native APK'
+          tag_name: native-v5.0.0
+          name: 'RGBTv 5.0.0 — Android native APK'
           body: |
-            ## RGBTv 4.1.0 — تطبيق أندرويد أصلي (Native)
+            ## RGBTv 5.0.0 — تطبيق أندرويد أصلي (Native)
 
             - مشغّل ExoPlayer أصلي — بدون WebView، أداء عالٍ وتشغيل سريع
             - Xtream Codes + Stalker + M3U + دليل XMLTV
             - بث مباشر / أفلام / مسلسلات + استئناف + حلقات تلقائية
             - يعمل على الهاتف والتابلت و Android TV (ريموت)
 
-            **التثبيت:** حمّل `RGBTv-native-4.1.0.apk` وثبّته على جهازك (فعّل «مصادر غير معروفة»).
+            **التثبيت:** حمّل `RGBTv-native-5.0.0.apk` وثبّته على جهازك (فعّل «مصادر غير معروفة»).
             **ملاحظة:** إن كانت نسخة WebView القديمة مثبّتة (بنفس الاسم)، احذفها أولاً ثم ثبّت هذه.
 
-            ## RGBTv 4.1.0 — native Android app
+            ## RGBTv 5.0.0 — native Android app
 
             - Native ExoPlayer (no WebView): fast start, smooth playback
             - Xtream Codes + Stalker + M3U + XMLTV guide
             - Live / Movies / Series + resume + auto-next episode
             - Phone, tablet & Android TV (D-pad remote)
 
-            **Install:** download `RGBTv-native-4.1.0.apk` and sideload it (allow “unknown sources”).
+            **Install:** download `RGBTv-native-5.0.0.apk` and sideload it (allow “unknown sources”).
             **Note:** if the old WebView build is installed, uninstall it first (different signature).
-          files: native/RGBTv-native-4.1.0.apk
+          files: native/RGBTv-native-5.0.0.apk

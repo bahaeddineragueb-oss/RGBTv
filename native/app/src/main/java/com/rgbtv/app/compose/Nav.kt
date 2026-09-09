@@ -32,38 +32,27 @@ class Navigator(initial: Screen = Screen.Home) {
     val current: Screen get() = stack.last()
 
     val sideKey: String
-        get() = when (val c = current) {
-            is Screen.Home -> "home"
-            is Screen.Browse -> when (c.mode) {
-                Screen.VOD -> "movies"
-                Screen.SERIES -> "series"
-                else -> "live"
+        get() {
+            for (s in stack.asReversed()) {
+                val k = when (s) {
+                    is Screen.Home -> "home"
+                    is Screen.Browse -> when (s.mode) {
+                        Screen.VOD -> "movies"
+                        Screen.SERIES -> "series"
+                        else -> "live"
+                    }
+                    is Screen.Sports -> "sports"
+                    is Screen.Guide -> "guide"
+                    is Screen.Search -> "search"
+                    is Screen.MyList -> "mylist"
+                    is Screen.Settings -> "settings"
+                    is Screen.Profiles -> "profiles"
+                    else -> null
+                }
+                if (k != null) return k
             }
-            is Screen.Sports -> "sports"
-            is Screen.Guide -> "guide"
-            is Screen.Search -> "search"
-            is Screen.MyList -> "mylist"
-            is Screen.Settings -> "settings"
-            is Screen.Profiles -> "profiles"
-            else -> sideKeyOf(stack.dropLast(1).lastOrNull())
+            return "home"
         }
-
-    private fun sideKeyOf(s: Screen?): String = when (s) {
-        is Screen.Home -> "home"
-        is Screen.Browse -> when (s.mode) {
-            Screen.VOD -> "movies"
-            Screen.SERIES -> "series"
-            else -> "live"
-        }
-        is Screen.Sports -> "sports"
-        is Screen.Guide -> "guide"
-        is Screen.Search -> "search"
-        is Screen.MyList -> "mylist"
-        is Screen.Settings -> "settings"
-        is Screen.Profiles -> "profiles"
-        is Screen.Detail -> sideKeyOf(stack.dropLast(1).lastOrNull())
-        else -> "home"
-    }
 
     /** Top-level: clears the stack. */
     fun nav(s: Screen) {
