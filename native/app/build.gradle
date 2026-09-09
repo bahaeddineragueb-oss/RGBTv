@@ -78,9 +78,9 @@ dependencies {
     // Images
     implementation 'io.coil-kt:coil-compose:2.5.0'
     // Room (local library DB)
-    implementation 'androidx.room:room-runtime:2.6.1'
-    implementation 'androidx.room:room-ktx:2.6.1'
-    kapt 'androidx.room:room-compiler:2.6.1'
+    implementation 'androidx.room:room-runtime:2.8.4'
+    implementation 'androidx.room:room-ktx:2.8.4'
+    kapt 'androidx.room:room-compiler:2.8.4'
     def media3 = '1.11.0'
     implementation "androidx.media3:media3-exoplayer:$media3"
     implementation "androidx.media3:media3-ui:$media3"

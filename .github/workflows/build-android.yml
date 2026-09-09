@@ -82,7 +82,7 @@ jobs:
         if: failure()
         run: |
           if [ -f build.log ]; then
-            grep -a "e: " build.log | head -20 | sed 's/%/%25/g' | cut -c1-400 | sed 's/^/::error::/'
+            grep -a -E "e: |error:|Caused by:|Execution failed for task" build.log | head -25 | sed 's/%/%25/g' | cut -c1-400 | sed 's/^/::error::/'
             grep -a -A6 "What went wrong" build.log | head -14 | tr '\n' ' ' | sed 's/%/%25/g' | cut -c1-500 | sed 's/^/::error::/'
           else
             echo "::error::no build.log produced"
