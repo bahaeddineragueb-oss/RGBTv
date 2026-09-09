@@ -23,33 +23,13 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="RGBTv"
-                        android:textColor="@color/neon_cyan"
-                        android:textSize="30sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/chip_bg"
-                        android:paddingStart="10dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="10dp"
-                        android:paddingBottom="2dp"
-                        android:text="PREMIUM"
-                        android:textColor="@color/neon_gold"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                    android:text="RGBTv"
+                    android:textColor="@color/text"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -113,16 +93,9 @@
                     android:paddingBottom="6dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🕐"
-                        android:textSize="14sp" />
-
-                    <TextView
                         android:id="@+id/clockText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
                         android:textColor="@color/text"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -150,7 +123,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:text="@string/connected"
-                        android:textColor="@color/neon_green"
+                        android:textColor="@color/ok"
                         android:textSize="14sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -178,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="6dp"
                     android:layout_weight="1"
-                    android:background="@drawable/wide_teal"
+                    android:background="@drawable/card_pro"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -190,11 +163,11 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔍"
-                            android:textSize="30sp" />
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:src="@android:drawable/ic_menu_search"
+                            android:tint="@color/text" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -206,7 +179,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/banner_search_t"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/text"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -216,7 +189,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"
                                 android:text="@string/banner_search_s"
-                                android:textColor="#E0F2F1"
+                                android:textColor="@color/sub"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -228,7 +201,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:layout_weight="1"
-                    android:background="@drawable/wide_blue"
+                    android:background="@drawable/card_pro"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -240,11 +213,11 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="⭐"
-                            android:textSize="30sp" />
+                        <ImageView
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:src="@android:drawable/star_big_on"
+                            android:tint="@color/text" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -256,7 +229,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/banner_mylist_t"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/text"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -266,7 +239,7 @@
                                 android:ellipsize="end"
                                 android:maxLines="1"
                                 android:text="@string/banner_mylist_s"
-                                android:textColor="#DBEAFE"
+                                android:textColor="@color/sub"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -314,102 +287,6 @@
                 android:clipToPadding="false"
                 android:padding="8dp"
                 android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="8dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💎"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/badge_quality"
-                        android:textColor="@color/sub"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🛡"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/badge_secure"
-                        android:textColor="@color/sub"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="⚡"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/badge_fast"
-                        android:textColor="@color/sub"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🎧"
-                        android:textSize="22sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@string/badge_support"
-                        android:textColor="@color/sub"
-                        android:textSize="11sp" />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -424,7 +301,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="RGBTv"
-            android:textColor="@color/neon_cyan"
+            android:textColor="@color/text"
             android:textSize="44sp"
             android:textStyle="bold" />
 

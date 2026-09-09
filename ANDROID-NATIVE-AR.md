@@ -13,8 +13,8 @@
 ## تحميل الـ APK (مجاناً، من GitHub)
 
 1. افتح صفحة المستودع على GitHub.
-2. **الطريقة الأسهل:** تبويب **Releases** ← إصدار **RGBTv 3.1.0 — Android native APK**
-   ← حمّل ملف `RGBTv-native-3.1.0.apk`.
+2. **الطريقة الأسهل:** تبويب **Releases** ← إصدار **RGBTv 3.2.0 — Android native APK**
+   ← حمّل ملف `RGBTv-native-3.2.0.apk`.
 3. **أو:** تبويب **Actions** ←‏ **Build Android APK (native)** ← افتح آخر تشغيل ناجح (✅)
    ← قسم **Artifacts** ←‏ **RGBTv-native-apk**.
 

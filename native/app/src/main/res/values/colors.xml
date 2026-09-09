@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bg">#0B0F19</color>
-    <color name="bg2">#0E1422</color>
-    <color name="bg_top">#0D1330</color>
-    <color name="bg_bottom">#04060D</color>
-    <color name="surface">#141A29</color>
-    <color name="card">#1A2233</color>
-    <color name="card2">#222C42</color>
-    <color name="glass">#141B2E</color>
-    <color name="glass2">#1E2947</color>
-    <color name="line">#26314A</color>
-    <color name="line2">#2E3A5C</color>
-    <color name="text">#F2F5FA</color>
-    <color name="sub">#9AA3B2</color>
-    <color name="dim">#5E6B85</color>
+    <color name="bg">#0A0A0C</color>
+    <color name="bg2">#0E0E12</color>
+    <color name="bg_top">#0A0A0C</color>
+    <color name="bg_bottom">#0A0A0C</color>
+    <color name="surface">#141419</color>
+    <color name="card">#141419</color>
+    <color name="card2">#1E1E24</color>
+    <color name="glass">#141419</color>
+    <color name="glass2">#1A1A21</color>
+    <color name="line">#26262C</color>
+    <color name="line2">#26262C</color>
+    <color name="text">#FFFFFF</color>
+    <color name="sub">#A7A7B0</color>
+    <color name="dim">#6B6B76</color>
     <color name="live">#E5484D</color>
     <color name="ok">#3ECF8E</color>
     <color name="warn">#F5A524</color>
@@ -30,6 +30,6 @@
     <color name="neon_orange">#FF9100</color>
     <color name="neon_gold">#FFD740</color>
     <color name="neon_red">#FF5252</color>
-    <color name="placeholder">#1B2334</color>
-    <color name="scrim">#CC0B0F19</color>
+    <color name="placeholder">#1C1C22</color>
+    <color name="scrim">#CC0A0A0C</color>
 </resources>

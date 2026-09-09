@@ -131,10 +131,10 @@ class HomeFragment : Fragment() {
     private fun renderTiles() {
         tiles.setData(
             listOf(
-                TileRow("📺", getString(R.string.live_tv), if (liveCount >= 0) getString(R.string.channels_d, liveCount) else "", 0),
-                TileRow("🎬", getString(R.string.movies), "", 1),
-                TileRow("🎭", getString(R.string.series), "", 2),
-                TileRow("📖", getString(R.string.guide), "", 3)
+                TileRow(android.R.drawable.ic_media_play, getString(R.string.live_tv), if (liveCount >= 0) getString(R.string.channels_d, liveCount) else ""),
+                TileRow(android.R.drawable.ic_menu_gallery, getString(R.string.movies)),
+                TileRow(android.R.drawable.ic_menu_slideshow, getString(R.string.series)),
+                TileRow(android.R.drawable.ic_menu_agenda, getString(R.string.guide))
             )
         )
     }

@@ -12,22 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="RGBTv"
-        android:textColor="@color/neon_cyan"
+        android:textColor="@color/text"
         android:textSize="40sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:background="@drawable/chip_bg"
-        android:paddingStart="12dp"
-        android:paddingTop="3dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="3dp"
-        android:text="PREMIUM"
-        android:textColor="@color/neon_gold"
-        android:textSize="12sp"
         android:textStyle="bold" />
 
     <TextView

@@ -304,7 +304,7 @@ class AccountAdapter(
 }
 
 /* ---------- home tiles ---------- */
-data class TileRow(val glyph: String, val label: String, val sub: String = "", val color: Int = 0)
+data class TileRow(val icon: Int, val label: String, val sub: String = "")
 
 class TileAdapter(
     private var items: List<TileRow> = emptyList(),
@@ -319,18 +319,10 @@ class TileAdapter(
     override fun getItemCount() = items.size
     override fun onBindViewHolder(h: H, pos: Int) {
         val r = items[pos]
-        h.b.glyph.text = r.glyph
+        h.b.glyph.setImageResource(r.icon)
         h.b.label.text = r.label
         h.b.sub.text = r.sub
         h.b.sub.visibility = if (r.sub.isEmpty()) View.GONE else View.VISIBLE
-        h.b.root.setBackgroundResource(
-            when (r.color) {
-                1 -> com.rgbtv.app.R.drawable.hero_magenta
-                2 -> com.rgbtv.app.R.drawable.hero_green
-                3 -> com.rgbtv.app.R.drawable.hero_orange
-                else -> com.rgbtv.app.R.drawable.hero_cyan
-            }
-        )
         h.b.root.setOnClickListener { onClick(pos) }
     }
     fun setData(list: List<TileRow>) {
