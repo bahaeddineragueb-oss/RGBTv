@@ -75,14 +75,6 @@ jobs:
           "$(dirname "$AAPT")/apksigner" verify RGBTv-native-3.2.0.apk && echo "signature OK"
           test $(stat -c%s RGBTv-native-3.2.0.apk) -gt 1000000 && echo "size OK"
 
-      - name: Commit APK to branch (one-time delivery)
-        run: |
-          git config user.name "ci-apk-bot"
-          git config user.email "ci-apk-bot@users.noreply.github.com"
-          git add -f RGBTv-native-3.2.0.apk
-          git commit -m "[skip ci] deliver RGBTv-native-3.2.0.apk" || echo "nothing to commit"
-          git push origin HEAD:arena/01a08076-rgbtv
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
