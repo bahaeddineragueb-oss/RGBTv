@@ -209,7 +209,7 @@ class BrowseFragment : Fragment() {
                 posterAdapter?.submitList(l.map { v ->
                     PosterRow(
                         "movie:${v.id}", v.poster, v.name,
-                        listOf(v.year, v.rating.ifEmpty { "" }.let { if (it.isNotEmpty()) "★$it" else "" })
+                        listOf(v.year, Ui.fmtRating(v.rating).let { if (it.isNotEmpty()) "★$it" else "" })
                             .filter { it.isNotEmpty() }.joinToString(" · "),
                         badge = badgeFor("movie", v.id, v.name, false)
                     )
@@ -225,7 +225,7 @@ class BrowseFragment : Fragment() {
                 posterAdapter?.submitList(l.map { s ->
                     PosterRow(
                         "series:${s.id}", s.poster, s.name,
-                        listOf(s.year, s.rating.ifEmpty { "" }.let { if (it.isNotEmpty()) "★$it" else "" })
+                        listOf(s.year, Ui.fmtRating(s.rating).let { if (it.isNotEmpty()) "★$it" else "" })
                             .filter { it.isNotEmpty() }.joinToString(" · "),
                         badge = badgeFor("series", s.id, s.name, false)
                     )
@@ -252,7 +252,7 @@ class BrowseFragment : Fragment() {
         val b = b ?: return
         if (mode == MODE_VOD) {
             val v = allVod.filter { it.poster.isNotEmpty() }
-                .maxByOrNull { it.rating.toDoubleOrNull() ?: -1.0 }
+                .maxByOrNull { Ui.fmtRating(it.rating).toDoubleOrNull() ?: -1.0 }
                 ?: allVod.firstOrNull()
             featVod = v
             if (v == null) {
@@ -263,7 +263,7 @@ class BrowseFragment : Fragment() {
             b.featTitle.text = v.name
             b.featMeta.text = listOf(
                 v.year,
-                if (v.rating.isNotEmpty()) "★ ${v.rating}" else "",
+                Ui.fmtRating(v.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" },
                 v.genre
             ).filter { it.isNotEmpty() }.joinToString(" · ")
             b.featPlot.text = v.plot
@@ -271,7 +271,7 @@ class BrowseFragment : Fragment() {
             b.featured.visibility = View.VISIBLE
         } else if (mode == MODE_SERIES) {
             val s = allSeries.filter { it.poster.isNotEmpty() }
-                .maxByOrNull { it.rating.toDoubleOrNull() ?: -1.0 }
+                .maxByOrNull { Ui.fmtRating(it.rating).toDoubleOrNull() ?: -1.0 }
                 ?: allSeries.firstOrNull()
             featSeries = s
             if (s == null) {
@@ -282,7 +282,7 @@ class BrowseFragment : Fragment() {
             b.featTitle.text = s.name
             b.featMeta.text = listOf(
                 s.year,
-                if (s.rating.isNotEmpty()) "★ ${s.rating}" else "",
+                Ui.fmtRating(s.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" },
                 s.genre
             ).filter { it.isNotEmpty() }.joinToString(" · ")
             b.featPlot.text = s.plot

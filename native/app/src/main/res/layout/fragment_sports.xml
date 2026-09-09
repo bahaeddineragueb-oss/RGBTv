@@ -12,11 +12,11 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="⚽"
-            android:textSize="24sp" />
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:src="@drawable/ic_nav_sports"
+            android:tint="@color/text" />
 
         <TextView
             android:layout_width="wrap_content"

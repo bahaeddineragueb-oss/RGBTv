@@ -23,7 +23,6 @@ class SettingsFragment : Fragment() {
     private var pendingPin: (() -> Unit)? = null
 
     private val langs = listOf("system", "en", "ar", "fr")
-    private val accents = listOf("blue", "green", "red", "purple", "gold")
     private val fmts = listOf("auto", "hls", "ts")
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View {
@@ -49,14 +48,6 @@ class SettingsFragment : Fragment() {
         else -> getString(R.string.lang_system)
     }
 
-    private fun accentLabel(a: String) = when (a) {
-        "green" -> getString(R.string.accent_green)
-        "red" -> getString(R.string.accent_red)
-        "purple" -> getString(R.string.accent_purple)
-        "gold" -> getString(R.string.accent_gold)
-        else -> getString(R.string.accent_blue)
-    }
-
     private fun fmtLabel(f: String) = when (f) {
         "hls" -> getString(R.string.fmt_hls)
         "ts" -> getString(R.string.fmt_ts)
@@ -71,7 +62,6 @@ class SettingsFragment : Fragment() {
                 SettingRow(getString(R.string.set_account), acc?.name ?: "", "›", getString(R.string.sec_account)),
                 SettingRow(getString(R.string.set_livefmt), getString(R.string.set_livefmt_d), fmtLabel(s.liveFormat), getString(R.string.sec_playback)),
                 SettingRow(getString(R.string.set_lang), "", langLabel(s.lang), getString(R.string.sec_appearance)),
-                SettingRow(getString(R.string.set_accent), "", accentLabel(s.accent)),
                 SettingRow(
                     getString(R.string.set_parental), getString(R.string.set_parental_d),
                     getString(if (s.parental) R.string.on else R.string.off), getString(R.string.sec_parental)
@@ -99,13 +89,9 @@ class SettingsFragment : Fragment() {
                 (requireActivity().application as App).applyLocale()
                 requireActivity().recreate()
             }
-            3 -> {
-                Store.updateSettings { it.accent = cycle(accents, it.accent) }
-                requireActivity().recreate()
-            }
-            4 -> toggleParental()
-            5 -> changePin()
-            6 -> {
+            3 -> toggleParental()
+            4 -> changePin()
+            5 -> {
                 val id = Repository.accountId ?: return
                 pendingPin = {
                     Store.clearLocks(id)
@@ -114,12 +100,12 @@ class SettingsFragment : Fragment() {
                 if (Store.settings().parental) PinDialog.verify(parentFragmentManager)
                 else pendingPin?.invoke().also { pendingPin = null }
             }
-            7 -> refresh()
-            8 -> AlertDialog.Builder(requireContext())
+            6 -> refresh()
+            7 -> AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.about_text, App.VERSION))
                 .setPositiveButton("OK", null)
                 .show()
-            9 -> requireActivity().finishAffinity()
+            8 -> requireActivity().finishAffinity()
         }
     }
 

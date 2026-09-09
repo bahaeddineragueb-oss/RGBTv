@@ -50,5 +50,15 @@ object Ui {
         return SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(ms))
     }
 
+    /** Normalizes provider ratings ("62." -> "6.2", "9.0" -> "9"). */
+    fun fmtRating(r: String): String {
+        val clean = r.trim().trimEnd('.')
+        if (clean.isEmpty()) return ""
+        val d = clean.toDoubleOrNull() ?: return clean
+        if (d <= 0) return ""
+        val v = if (d > 10) d / 10 else d
+        return "%.1f".format(v).trimEnd('0').trimEnd('.')
+    }
+
     fun Fragment.main(): MainActivity = requireActivity() as MainActivity
 }

@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,34 +22,30 @@ class MainActivity : AppCompatActivity() {
     private var selKey = ""
     private var expanded = false
     private val rows = mutableMapOf<String, LinearLayout>()
+    private val icons = mutableMapOf<String, ImageView>()
     private val labels = mutableListOf<TextView>()
     private var anim: ValueAnimator? = null
 
-    private data class NavDef(val key: String, val glyph: String, val label: Int)
+    private data class NavDef(val key: String, val icon: Int, val label: Int)
 
     private val defs = listOf(
-        NavDef("home", "\uD83C\uDFE0", R.string.nav_home),
-        NavDef("live", "\uD83D\uDCFA", R.string.live_tv),
-        NavDef("movies", "\uD83C\uDFAC", R.string.movies),
-        NavDef("series", "\uD83D\uDCDA", R.string.series),
-        NavDef("sports", "⚽", R.string.nav_sports),
-        NavDef("guide", "\uD83D\uDCC5", R.string.guide),
-        NavDef("mylist", "⭐", R.string.my_list),
-        NavDef("search", "\uD83D\uDD0D", R.string.search),
-        NavDef("settings", "⚙", R.string.settings),
-        NavDef("profiles", "\uD83D\uDC65", R.string.switch_profile)
+        NavDef("home", R.drawable.ic_nav_home, R.string.nav_home),
+        NavDef("live", R.drawable.ic_nav_live, R.string.live_tv),
+        NavDef("movies", R.drawable.ic_nav_movie, R.string.movies),
+        NavDef("series", R.drawable.ic_nav_series, R.string.series),
+        NavDef("sports", R.drawable.ic_nav_sports, R.string.nav_sports),
+        NavDef("guide", R.drawable.ic_nav_guide, R.string.guide),
+        NavDef("mylist", R.drawable.ic_nav_fav, R.string.my_list),
+        NavDef("search", R.drawable.ic_nav_search, R.string.search),
+        NavDef("settings", R.drawable.ic_nav_settings, R.string.settings),
+        NavDef("profiles", R.drawable.ic_nav_users, R.string.switch_profile)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-        when (Store.settings().accent) {
-            "green" -> setTheme(R.style.Overlay_Accent_Green)
-            "red" -> setTheme(R.style.Overlay_Accent_Red)
-            "purple" -> setTheme(R.style.Overlay_Accent_Purple)
-            "gold" -> setTheme(R.style.Overlay_Accent_Gold)
-            else -> setTheme(R.style.Overlay_Accent_Blue)
-        }
+        // Single Electric Blue accent (§2) — no multi-accent themes.
+        setTheme(R.style.Overlay_Accent_Blue)
         b = ActivityMainBinding.inflate(layoutInflater)
         setContentView(b.root)
         buildRows()
@@ -76,6 +73,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildRows() {
         val ctx = this
+        val tint = getColorStateList(R.color.nav_text)
         for (d in defs) {
             val row = LinearLayout(ctx)
             row.orientation = LinearLayout.HORIZONTAL
@@ -90,16 +88,16 @@ class MainActivity : AppCompatActivity() {
             row.layoutParams = lp
             row.setPadding(dp(8), dp(10), dp(8), dp(10))
 
-            val icon = TextView(ctx)
-            icon.text = d.glyph
-            icon.textSize = 24f
-            icon.gravity = Gravity.CENTER
-            icon.layoutParams = LinearLayout.LayoutParams(dp(48), ViewGroup.LayoutParams.WRAP_CONTENT)
+            val icon = ImageView(ctx)
+            icon.setImageResource(d.icon)
+            icon.imageTintList = tint
+            icon.layoutParams = LinearLayout.LayoutParams(dp(52), dp(30))
+            icon.scaleType = ImageView.ScaleType.FIT_CENTER
             row.addView(icon)
 
             val label = TextView(ctx)
             label.setText(d.label)
-            label.setTextColor(getColorStateList(R.color.nav_text))
+            label.setTextColor(tint)
             label.textSize = 16f
             label.maxLines = 1
             val llp = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
@@ -113,6 +111,7 @@ class MainActivity : AppCompatActivity() {
             Ui.focusScale(row, 1.05f)
             b.navList.addView(row)
             rows[d.key] = row
+            icons[d.key] = icon
         }
     }
 
@@ -182,7 +181,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun paintNav() {
-        for ((k, v) in rows) v.isSelected = (k == selKey)
+        for ((k, v) in rows) {
+            val sel = k == selKey
+            v.isSelected = sel
+            icons[k]?.isSelected = sel
+        }
     }
 
     fun open(f: Fragment, back: Boolean = true) {

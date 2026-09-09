@@ -102,7 +102,7 @@ class DetailFragment : Fragment() {
         Images.load(b.backdrop, d.backdrop.ifEmpty { d.poster }, Images.Kind.BACKDROP)
         Images.load(b.poster, d.poster, Images.Kind.POSTER)
         b.dTitle.text = d.name
-        b.dMeta.text = listOf(d.year, d.rating.let { if (it.isNotEmpty()) "★ $it" else "" }, d.duration)
+        b.dMeta.text = listOf(d.year, Ui.fmtRating(d.rating).let { if (it.isNotEmpty()) "★ $it" else "" }, d.duration)
             .filter { it.isNotEmpty() }.joinToString(" · ")
         b.dSub.text = listOf(d.genre, d.director.let { if (it.isNotEmpty()) "Dir: $it" else "" }, d.cast)
             .filter { it.isNotEmpty() }.joinToString(" · ")
@@ -117,7 +117,7 @@ class DetailFragment : Fragment() {
         Images.load(b.backdrop, d.backdrop.ifEmpty { d.poster }, Images.Kind.BACKDROP)
         Images.load(b.poster, d.poster, Images.Kind.POSTER)
         b.dTitle.text = d.name
-        b.dMeta.text = listOf(d.year, d.rating.let { if (it.isNotEmpty()) "★ $it" else "" })
+        b.dMeta.text = listOf(d.year, Ui.fmtRating(d.rating).let { if (it.isNotEmpty()) "★ $it" else "" })
             .filter { it.isNotEmpty() }.joinToString(" · ")
         b.dSub.text = listOf(d.genre, d.cast).filter { it.isNotEmpty() }.joinToString(" · ")
         b.dPlot.text = d.plot

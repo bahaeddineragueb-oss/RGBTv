@@ -145,7 +145,7 @@ class HomeFragment : Fragment() {
             (if (s.extra.isNotEmpty()) " · ${s.extra}" else "")
     }
 
-    private fun ratingOf(r: String): Double = r.toDoubleOrNull() ?: -1.0
+    private fun ratingOf(r: String): Double = Ui.fmtRating(r).toDoubleOrNull() ?: -1.0
 
     private suspend fun loadDiscovery() {
         val p = Repository.provider ?: return
@@ -162,14 +162,14 @@ class HomeFragment : Fragment() {
         railT.submitList(vodList.map { v ->
             PosterRow(
                 "movie:${v.id}", v.poster, v.name,
-                listOf(v.year, if (v.rating.isNotEmpty()) "★ ${v.rating}" else "")
+                listOf(v.year, Ui.fmtRating(v.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" })
                     .filter { it.isNotEmpty() }.joinToString(" · ")
             )
         })
         railS.submitList(seriesList.map { s ->
             PosterRow(
                 "series:${s.id}", s.poster, s.name,
-                listOf(s.year, if (s.rating.isNotEmpty()) "★ ${s.rating}" else "")
+                listOf(s.year, Ui.fmtRating(s.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" })
                     .filter { it.isNotEmpty() }.joinToString(" · ")
             )
         })
@@ -193,7 +193,7 @@ class HomeFragment : Fragment() {
             b.heroCat.text = getString(R.string.series).uppercase(Locale.getDefault())
             b.heroTitle.text = topSeries.name
             b.heroMeta.text = listOf(
-                if (topSeries.rating.isNotEmpty()) "★ ${topSeries.rating}" else "",
+                Ui.fmtRating(topSeries.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" },
                 topSeries.year, topSeries.genre
             ).filter { it.isNotEmpty() }.joinToString(" · ")
             b.heroPlot.text = topSeries.plot
@@ -205,7 +205,7 @@ class HomeFragment : Fragment() {
             b.heroCat.text = getString(R.string.movies).uppercase(Locale.getDefault())
             b.heroTitle.text = topVod.name
             b.heroMeta.text = listOf(
-                if (topVod.rating.isNotEmpty()) "★ ${topVod.rating}" else "",
+                Ui.fmtRating(topVod.rating).let { rr -> if (rr.isNotEmpty()) "★ $rr" else "" },
                 topVod.year, topVod.genre
             ).filter { it.isNotEmpty() }.joinToString(" · ")
             b.heroPlot.text = topVod.plot

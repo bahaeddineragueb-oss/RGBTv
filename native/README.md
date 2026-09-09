@@ -15,7 +15,7 @@
 ## البناء السحابي (بدون أي تثبيت)
 
 GitHub → تبويب **Actions** →‏ **Build Android APK (native)** →‏ **Run workflow**
-→ حمّل الـ APK من **Artifacts** (أو من Release `native-v4.0.0`).
+→ حمّل الـ APK من **Artifacts** (أو من Release `native-v4.1.0`).
 
 ## توقيع نسخة المتجر (اختياري)
 
