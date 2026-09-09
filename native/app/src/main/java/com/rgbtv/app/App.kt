@@ -6,10 +6,12 @@ import androidx.core.os.LocaleListCompat
 import com.rgbtv.app.data.DiskCacheInit
 import com.rgbtv.app.data.Store
 import com.rgbtv.app.img.Images
+import com.rgbtv.app.ui.CrashHandler
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        CrashHandler.install(this)
         Store.init(this)
         Images.init(this)
         DiskCacheInit.init(this)
@@ -25,6 +27,6 @@ class App : Application() {
     }
 
     companion object {
-        const val VERSION = "5.0.0"
+        const val VERSION = "5.0.1"
     }
 }
