@@ -59,17 +59,8 @@ jobs:
       - name: Build release APK
         run: |
           chmod +x gradlew
-          set -o pipefail
-          ./gradlew :app:assembleRelease --stacktrace 2>&1 | tee build-full.log
+          ./gradlew :app:assembleRelease --stacktrace
 
-      - name: Report error log (temporary, on failure)
-        if: failure()
-        run: |
-          tail -c 60000 build-full.log > build-error.log
-          git config user.name "arena-bot"
-          git config user.email "arena-bot@users.noreply.github.com"
-          git add -f build-error.log
-          git commit -m "[skip ci] build error log" && git push origin HEAD:${{ github.ref_name }} || true
 
       - name: Collect APK
         run: |
@@ -92,21 +83,7 @@ jobs:
           path: native/RGBTv-native-4.0.0.apk
           if-no-files-found: error
 
-      - name: Deliver APK to branch (one-time)
-        run: |
-          git config user.name "arena-bot"
-          git config user.email "arena-bot@users.noreply.github.com"
-          git add -f RGBTv-native-4.0.0.apk
-          git commit -m "[skip ci] deliver RGBTv-native-4.0.0.apk" || exit 0
-          git push origin HEAD:${{ github.ref_name }}
 
-      - name: Deliver APK to branch (one-time)
-        run: |
-          git config user.name "arena-bot"
-          git config user.email "arena-bot@users.noreply.github.com"
-          git add -f RGBTv-native-4.0.0.apk
-          git commit -m "[skip ci] deliver RGBTv-native-4.0.0.apk" || exit 0
-          git push origin HEAD:${{ github.ref_name }}
 
       - name: Publish GitHub release
         if: github.event_name == 'workflow_dispatch' && inputs.publish_release
