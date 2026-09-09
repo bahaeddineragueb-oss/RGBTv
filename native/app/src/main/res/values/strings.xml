@@ -166,4 +166,23 @@
     <string name="badge_fast">Fast &amp; Stable</string>
     <string name="badge_support">Always Here</string>
     <string name="nav_home">Home</string>
+    <string name="nav_sports">Sports</string>
+    <string name="watch_now">WATCH NOW</string>
+    <string name="featured">Featured</string>
+    <string name="trending_now">Trending Now</string>
+    <string name="live_now">Live Now</string>
+    <string name="popular_series">Popular Series</string>
+    <string name="popular_channels">Popular Channels</string>
+    <string name="recently_added">Recently Added</string>
+    <string name="sport_all">All</string>
+    <string name="sport_football">Football</string>
+    <string name="sport_basket">Basketball</string>
+    <string name="sport_tennis">Tennis</string>
+    <string name="sport_other">More Sports</string>
+    <string name="sec_account">ACCOUNT</string>
+    <string name="sec_playback">PLAYBACK</string>
+    <string name="sec_appearance">APPEARANCE</string>
+    <string name="sec_parental">PARENTAL</string>
+    <string name="sec_advanced">ADVANCED</string>
+    <string name="sec_about">ABOUT</string>
 </resources>

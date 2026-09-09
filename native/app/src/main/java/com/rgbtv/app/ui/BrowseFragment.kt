@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rgbtv.app.R
 import com.rgbtv.app.data.Category
+import com.rgbtv.app.data.FavItem
 import com.rgbtv.app.data.LiveCh
 import com.rgbtv.app.data.SeriesItem
 import com.rgbtv.app.data.Store
 import com.rgbtv.app.data.VodItem
 import com.rgbtv.app.databinding.FragmentBrowseBinding
+import com.rgbtv.app.img.Images
 import com.rgbtv.app.net.Net
 import com.rgbtv.app.repo.Repository
 import com.rgbtv.app.ui.Ui.main
@@ -38,6 +40,9 @@ class BrowseFragment : Fragment() {
     private var filteredLive: List<LiveCh> = emptyList()
     private var filteredVod: List<VodItem> = emptyList()
     private var filteredSeries: List<SeriesItem> = emptyList()
+    private var featVod: VodItem? = null
+    private var featSeries: SeriesItem? = null
+    private var currentLive: LiveCh? = null
     private var sortIdx = 0
     private var epgJob: Job? = null
     private var filterJob: Job? = null
@@ -67,7 +72,6 @@ class BrowseFragment : Fragment() {
             MODE_SERIES -> getString(R.string.series)
             else -> getString(R.string.live_tv)
         }
-        b.epgPanel.visibility = if (mode == MODE_LIVE) View.VISIBLE else View.GONE
         b.cats.layoutManager = LinearLayoutManager(requireContext())
         b.grid.layoutManager = GridLayoutManager(requireContext(), 4)
         catsAdapter = CategoryAdapter(onPick = { onPickCat(it) })
@@ -89,6 +93,12 @@ class BrowseFragment : Fragment() {
             b.grid.adapter = posterAdapter
             Ui.autoSpan(b.grid, 155)
         }
+        Ui.focusScale(b.featured)
+        b.featured.setOnClickListener { onFeatDetails() }
+        b.featPlay.setOnClickListener { onFeatPlay() }
+        b.featDetails.setOnClickListener { onFeatDetails() }
+        b.pvPlay.setOnClickListener { currentLive?.let { onLiveClick(it) } }
+        b.pvFav.setOnClickListener { onPvFav() }
         paintSort()
         b.btnSort.setOnClickListener {
             sortIdx = (sortIdx + 1) % sortLabels().size
@@ -144,6 +154,7 @@ class BrowseFragment : Fragment() {
                 }
                 b.loading.visibility = View.GONE
                 applyFilter()
+                paintFeatured()
             } catch (e: Exception) {
                 b.loading.visibility = View.GONE
                 b.empty.visibility = View.VISIBLE
@@ -237,6 +248,77 @@ class BrowseFragment : Fragment() {
         return if (sb.isEmpty()) null else sb.toString()
     }
 
+    private fun paintFeatured() {
+        val b = b ?: return
+        if (mode == MODE_VOD) {
+            val v = allVod.filter { it.poster.isNotEmpty() }
+                .maxByOrNull { it.rating.toDoubleOrNull() ?: -1.0 }
+                ?: allVod.firstOrNull()
+            featVod = v
+            if (v == null) {
+                b.featured.visibility = View.GONE
+                return
+            }
+            Images.load(b.featPoster, v.poster, Images.Kind.POSTER)
+            b.featTitle.text = v.name
+            b.featMeta.text = listOf(
+                v.year,
+                if (v.rating.isNotEmpty()) "★ ${v.rating}" else "",
+                v.genre
+            ).filter { it.isNotEmpty() }.joinToString(" · ")
+            b.featPlot.text = v.plot
+            b.featPlot.visibility = if (v.plot.isEmpty()) View.GONE else View.VISIBLE
+            b.featured.visibility = View.VISIBLE
+        } else if (mode == MODE_SERIES) {
+            val s = allSeries.filter { it.poster.isNotEmpty() }
+                .maxByOrNull { it.rating.toDoubleOrNull() ?: -1.0 }
+                ?: allSeries.firstOrNull()
+            featSeries = s
+            if (s == null) {
+                b.featured.visibility = View.GONE
+                return
+            }
+            Images.load(b.featPoster, s.poster, Images.Kind.POSTER)
+            b.featTitle.text = s.name
+            b.featMeta.text = listOf(
+                s.year,
+                if (s.rating.isNotEmpty()) "★ ${s.rating}" else "",
+                s.genre
+            ).filter { it.isNotEmpty() }.joinToString(" · ")
+            b.featPlot.text = s.plot
+            b.featPlot.visibility = if (s.plot.isEmpty()) View.GONE else View.VISIBLE
+            b.featured.visibility = View.VISIBLE
+        } else {
+            b.featured.visibility = View.GONE
+        }
+    }
+
+    private fun onFeatPlay() {
+        if (mode == MODE_VOD) {
+            val v = featVod ?: return
+            Guard.run(this, accId(), "movie", v.id, v.name) {
+                val pos = Store.getPos(accId(), "movie:${v.id}")
+                PlayerActivity.playVod(requireContext(), v, null, pos?.pos ?: 0)
+            }
+        } else if (mode == MODE_SERIES) {
+            onFeatDetails()
+        }
+    }
+
+    private fun onFeatDetails() {
+        if (mode == MODE_VOD) {
+            val v = featVod ?: return
+            Guard.run(this, accId(), "movie", v.id, v.name) {
+                main().open(DetailFragment.forItem("movie", v.toJson().toString()))
+            }
+        } else if (mode == MODE_SERIES) {
+            val s = featSeries ?: return
+            Guard.run(this, accId(), "series", s.id, s.name) {
+                main().open(DetailFragment.forItem("series", s.toJson().toString()))
+            }
+        }
+    }
+
     private fun onLiveClick(ch: LiveCh) {
         Guard.run(this, accId(), "live", ch.id, ch.name) {
             PlayerActivity.playLive(requireContext(), ch, filteredLive)
@@ -246,11 +328,16 @@ class BrowseFragment : Fragment() {
     private fun onLiveFocus(ch: LiveCh) {
         Repository.provider?.prefetch(ch)
         val b = b ?: return
+        currentLive = ch
+        b.preview.visibility = View.VISIBLE
+        Images.load(b.pvLogo, ch.logo, Images.Kind.LOGO)
+        b.pvName.text = ch.name
+        paintPvFav()
         epgJob?.cancel()
         if (Store.isLocked(accId(), "live:${ch.id}")) {
-            b.epgNow.text = "🔒 ${getString(R.string.locked)}"
-            b.epgNext.text = ""
-            b.epgProgress.progress = 0
+            b.pvNow.text = "🔒 ${getString(R.string.locked)}"
+            b.pvNext.text = ""
+            b.pvProgress.progress = 0
             return
         }
         epgJob = lifecycleScope.launch {
@@ -259,19 +346,33 @@ class BrowseFragment : Fragment() {
                 val (now, next) = Repository.nowNext(requireContext(), ch)
                 val bb = b ?: return@launch
                 if (now == null && next == null) {
-                    bb.epgNow.text = getString(R.string.no_epg)
-                    bb.epgNext.text = ""
-                    bb.epgProgress.progress = 0
+                    bb.pvNow.text = getString(R.string.no_epg)
+                    bb.pvNext.text = ""
+                    bb.pvProgress.progress = 0
                 } else {
-                    bb.epgNow.text = "• ${now?.title ?: next?.title ?: ""}" +
+                    bb.pvNow.text = "• ${now?.title ?: next?.title ?: ""}" +
                         (now?.let { " (${Ui.clock(it.start)}–${Ui.clock(it.end)})" } ?: "")
-                    bb.epgNext.text = next?.let { "${getString(R.string.next)}: ${it.title} ${Ui.clock(it.start)}" } ?: ""
-                    bb.epgProgress.progress = if (now != null && now.end > now.start) {
+                    bb.pvNext.text = next?.let { "${getString(R.string.next)}: ${it.title} ${Ui.clock(it.start)}" } ?: ""
+                    bb.pvProgress.progress = if (now != null && now.end > now.start) {
                         (((System.currentTimeMillis() / 1000 - now.start) * 100 / (now.end - now.start)).toInt().coerceIn(0, 100))
                     } else 0
                 }
             } catch (e: Exception) { }
         }
+    }
+
+    private fun onPvFav() {
+        val ch = currentLive ?: return
+        val now = Store.toggleFav(accId(), FavItem("live", ch.id, ch.name, ch.logo, ch.toJson().toString()))
+        Ui.toast(context, getString(if (now) R.string.added_fav else R.string.removed_fav))
+        paintPvFav()
+    }
+
+    private fun paintPvFav() {
+        val b = b ?: return
+        val ch = currentLive ?: return
+        val fav = Store.isFav(accId(), "live", ch.id)
+        b.pvFav.text = if (fav) getString(R.string.remove_fav) else getString(R.string.add_fav)
     }
 
     private fun toggleLiveLock(ch: LiveCh) {

@@ -17,11 +17,11 @@ object Ui {
     }
 
     /** TV-style focus zoom for cards/rows. Call on the focusable root view. */
-    fun focusScale(v: View, s: Float = 1.06f) {
+    fun focusScale(v: View, s: Float = 1.05f) {
         v.setOnFocusChangeListener { vv, has ->
             vv.animate().cancel()
             vv.animate().scaleX(if (has) s else 1f).scaleY(if (has) s else 1f)
-                .translationZ(if (has) 8f else 0f).setDuration(120).start()
+                .translationZ(if (has) 8f else 0f).setDuration(180).start()
         }
     }
 

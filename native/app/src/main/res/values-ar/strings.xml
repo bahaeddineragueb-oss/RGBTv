@@ -155,4 +155,23 @@
     <string name="badge_fast">سريع ومستقر</string>
     <string name="badge_support">دعم متواصل</string>
     <string name="nav_home">الرئيسية</string>
+    <string name="nav_sports">الرياضة</string>
+    <string name="watch_now">شاهد الآن</string>
+    <string name="featured">مميز</string>
+    <string name="trending_now">الرائج الآن</string>
+    <string name="live_now">يبث الآن</string>
+    <string name="popular_series">مسلسلات رائجة</string>
+    <string name="popular_channels">قنوات رائجة</string>
+    <string name="recently_added">أضيفت حديثًا</string>
+    <string name="sport_all">الكل</string>
+    <string name="sport_football">كرة القدم</string>
+    <string name="sport_basket">كرة السلة</string>
+    <string name="sport_tennis">التنس</string>
+    <string name="sport_other">رياضات أخرى</string>
+    <string name="sec_account">الحساب</string>
+    <string name="sec_playback">التشغيل</string>
+    <string name="sec_appearance">المظهر</string>
+    <string name="sec_parental">الرقابة الأبوية</string>
+    <string name="sec_advanced">متقدم</string>
+    <string name="sec_about">حول</string>
 </resources>

@@ -68,18 +68,18 @@ class SettingsFragment : Fragment() {
         val acc = Repository.currentAccount()
         adapter.setData(
             listOf(
-                SettingRow(getString(R.string.set_account), acc?.name ?: "", "›"),
-                SettingRow(getString(R.string.set_livefmt), getString(R.string.set_livefmt_d), fmtLabel(s.liveFormat)),
-                SettingRow(getString(R.string.set_lang), "", langLabel(s.lang)),
+                SettingRow(getString(R.string.set_account), acc?.name ?: "", "›", getString(R.string.sec_account)),
+                SettingRow(getString(R.string.set_livefmt), getString(R.string.set_livefmt_d), fmtLabel(s.liveFormat), getString(R.string.sec_playback)),
+                SettingRow(getString(R.string.set_lang), "", langLabel(s.lang), getString(R.string.sec_appearance)),
                 SettingRow(getString(R.string.set_accent), "", accentLabel(s.accent)),
                 SettingRow(
                     getString(R.string.set_parental), getString(R.string.set_parental_d),
-                    getString(if (s.parental) R.string.on else R.string.off)
+                    getString(if (s.parental) R.string.on else R.string.off), getString(R.string.sec_parental)
                 ),
                 SettingRow(getString(R.string.set_pin), getString(R.string.set_pin_d), "›"),
                 SettingRow(getString(R.string.set_unlockall), getString(R.string.set_unlockall_d), ""),
-                SettingRow(getString(R.string.set_refresh), getString(R.string.set_refresh_d), ""),
-                SettingRow(getString(R.string.set_about), "RGBTv ${App.VERSION}", "›"),
+                SettingRow(getString(R.string.set_refresh), getString(R.string.set_refresh_d), "", getString(R.string.sec_advanced)),
+                SettingRow(getString(R.string.set_about), "RGBTv ${App.VERSION}", "›", getString(R.string.sec_about)),
                 SettingRow(getString(R.string.set_exit), "", "")
             )
         )

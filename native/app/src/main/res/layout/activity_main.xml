@@ -1,148 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_app"
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="240dp"
+        android:id="@+id/sidebar"
+        android:layout_width="72dp"
         android:layout_height="match_parent"
-        android:background="#0E0E12"
+        android:background="@color/bg2"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:padding="8dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/sideLogo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:text="RGBTv"
-            android:textColor="@color/text"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textColor="?attr/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-        <View
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/line" />
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:scrollbars="none">
 
-        <TextView
-            android:id="@+id/navHome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/nav_home"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navLive"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/live_tv"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navMovies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/movies"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navSeries"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/series"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navGuide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/guide"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navSearch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/search"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navMylist"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/my_list"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/settings"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/navProfiles"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/nav_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="14dp"
-            android:text="@string/switch_profile"
-            android:textColor="@color/nav_text"
-            android:textSize="16sp" />
+            <LinearLayout
+                android:id="@+id/navList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical" />
+        </ScrollView>
     </LinearLayout>
 
     <View

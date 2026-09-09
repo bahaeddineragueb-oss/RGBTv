@@ -232,7 +232,7 @@ class EpgAdapter(
 }
 
 /* ---------- settings rows ---------- */
-data class SettingRow(val title: String, val desc: String, val value: String)
+data class SettingRow(val title: String, val desc: String, val value: String, val section: String = "")
 
 class SettingAdapter(
     private var items: List<SettingRow> = emptyList(),
@@ -241,7 +241,7 @@ class SettingAdapter(
     inner class H(val b: ItemSettingBinding) : RecyclerView.ViewHolder(b.root)
     override fun onCreateViewHolder(p: ViewGroup, v: Int): H {
         val b = ItemSettingBinding.inflate(LayoutInflater.from(p.context), p, false)
-        Ui.focusScale(b.root, 1.02f)
+        Ui.focusScale(b.row, 1.02f)
         return H(b)
     }
     override fun getItemCount() = items.size
@@ -251,7 +251,9 @@ class SettingAdapter(
         h.b.desc.text = r.desc
         h.b.desc.visibility = if (r.desc.isEmpty()) View.GONE else View.VISIBLE
         h.b.value.text = r.value
-        h.b.root.setOnClickListener { onClick(pos) }
+        h.b.section.text = r.section
+        h.b.section.visibility = if (r.section.isEmpty()) View.GONE else View.VISIBLE
+        h.b.row.setOnClickListener { onClick(pos) }
     }
     fun setData(list: List<SettingRow>) {
         items = list

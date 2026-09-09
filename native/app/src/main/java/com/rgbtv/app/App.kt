@@ -25,6 +25,6 @@ class App : Application() {
     }
 
     companion object {
-        const val VERSION = "3.3.0"
+        const val VERSION = "4.0.0"
     }
 }

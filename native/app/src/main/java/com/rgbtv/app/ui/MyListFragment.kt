@@ -42,6 +42,10 @@ class MyListFragment : Fragment() {
             Store.clearHistory(accId())
             render()
         }
+        b.fAll.setOnClickListener { favTab = 0; render() }
+        b.fLive.setOnClickListener { favTab = 1; render() }
+        b.fVod.setOnClickListener { favTab = 2; render() }
+        b.fSeries.setOnClickListener { favTab = 3; render() }
         render()
     }
 

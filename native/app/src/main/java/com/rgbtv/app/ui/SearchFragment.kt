@@ -57,6 +57,9 @@ class SearchFragment : Fragment() {
                 runSearch()
             }
         }
+        b.sg1.setOnClickListener { b.query.setText("Champions League") }
+        b.sg2.setOnClickListener { b.query.setText("CNN") }
+        b.sg3.setOnClickListener { b.query.setText("Breaking Bad") }
         b.query.post { b.query.requestFocus() }
     }
 

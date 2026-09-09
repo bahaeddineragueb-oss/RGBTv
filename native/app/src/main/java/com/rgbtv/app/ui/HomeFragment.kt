@@ -1,5 +1,7 @@
 package com.rgbtv.app.ui
 
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rgbtv.app.R
 import com.rgbtv.app.data.Account
@@ -19,6 +20,7 @@ import com.rgbtv.app.data.SeriesItem
 import com.rgbtv.app.data.Store
 import com.rgbtv.app.data.VodItem
 import com.rgbtv.app.databinding.FragmentHomeBinding
+import com.rgbtv.app.img.Images
 import com.rgbtv.app.net.Net
 import com.rgbtv.app.net.SessionInfo
 import com.rgbtv.app.repo.Repository
@@ -32,12 +34,21 @@ import java.util.Locale
 class HomeFragment : Fragment() {
     private var b: FragmentHomeBinding? = null
     private val ui = Handler(Looper.getMainLooper())
-    private lateinit var tiles: TileAdapter
     private lateinit var railC: PosterAdapter
+    private lateinit var railL: ChannelAdapter
+    private lateinit var railT: PosterAdapter
+    private lateinit var railS: PosterAdapter
     private lateinit var railF: PosterAdapter
     private var hist: List<HistItem> = emptyList()
     private var favs: List<FavItem> = emptyList()
-    private var liveCount = -1
+    private var liveList: List<LiveCh> = emptyList()
+    private var vodList: List<VodItem> = emptyList()
+    private var seriesList: List<SeriesItem> = emptyList()
+    private var heroKind = ""
+    private var heroVod: VodItem? = null
+    private var heroSeries: SeriesItem? = null
+    private var heroLive: LiveCh? = null
+    private var pulse: ObjectAnimator? = null
 
     override fun onCreateView(i: LayoutInflater, c: ViewGroup?, s: Bundle?): View {
         val v = FragmentHomeBinding.inflate(i, c, false)
@@ -48,22 +59,32 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(v: View, s: Bundle?) {
         val b = b ?: return
         b.railContinue.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        b.railLiveNow.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        b.railTrending.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        b.railSeries.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         b.railFavs.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        b.tiles.layoutManager = GridLayoutManager(requireContext(), 4)
         railC = PosterAdapter(onClick = { openHist(it) })
+        railL = ChannelAdapter(onClick = { openLive(it) }, onFocus = {}, onLong = {})
+        railT = PosterAdapter(onClick = { openVod(it) })
+        railS = PosterAdapter(onClick = { openSeries(it) })
         railF = PosterAdapter(onClick = { openFav(it) }, onLong = { removeFav(it) })
         b.railContinue.adapter = railC
+        b.railLiveNow.adapter = railL
+        b.railTrending.adapter = railT
+        b.railSeries.adapter = railS
         b.railFavs.adapter = railF
-        tiles = TileAdapter(onClick = { openTile(it) })
-        b.tiles.adapter = tiles
-        b.bannerSearch.setOnClickListener { main().open(SearchFragment()) }
-        b.bannerMylist.setOnClickListener { main().open(MyListFragment()) }
-        Ui.focusScale(b.bannerSearch)
-        Ui.focusScale(b.bannerMylist)
+        Ui.focusScale(b.heroCard)
+        b.heroCard.setOnClickListener { heroWatch() }
+        b.btnWatch.setOnClickListener { heroWatch() }
+        b.btnHeroFav.setOnClickListener { heroFav() }
         b.btnSwitch.setOnClickListener { main().profiles() }
         b.btnSettings.setOnClickListener { main().open(SettingsFragment()) }
         b.btnRetry.setOnClickListener { load() }
         b.btnSwitchErr.setOnClickListener { main().profiles() }
+        pulse = ObjectAnimator.ofFloat(b.skeleton, "alpha", 1f, 0.5f, 1f)
+        pulse?.duration = 1200
+        pulse?.repeatCount = ValueAnimator.INFINITE
+        pulse?.start()
         tickClock()
         load()
     }
@@ -93,51 +114,180 @@ class HomeFragment : Fragment() {
         val b = b ?: return
         val a = acc()
         if (a == null) { main().profiles(); return }
-        b.loading.visibility = View.VISIBLE
+        b.skeleton.visibility = View.VISIBLE
         b.scroll.visibility = View.GONE
         b.error.visibility = View.GONE
-        b.loadingText.text = getString(R.string.connecting)
         lifecycleScope.launch {
             try {
                 val s = Repository.sessionFor(a)
-                render(a, s)
-                b.loading.visibility = View.GONE
+                renderHeader(a, s)
+                renderRails()
+                b.skeleton.visibility = View.GONE
                 b.scroll.visibility = View.VISIBLE
-                // warm live list in background (tile count + faster first open)
                 launch {
                     try {
-                        liveCount = Repository.provider?.live(null)?.size ?: 0
-                        renderTiles()
+                        loadDiscovery()
                     } catch (e: Exception) { }
                 }
             } catch (e: Exception) {
-                b.loading.visibility = View.GONE
+                b.skeleton.visibility = View.GONE
                 b.error.visibility = View.VISIBLE
                 b.errorText.text = Net.userMsg(context, e)
             }
         }
     }
 
-    private fun render(a: Account, s: SessionInfo) {
+    private fun renderHeader(a: Account, s: SessionInfo) {
         val b = b ?: return
         b.accName.text = a.name.ifEmpty { a.url }
         val exp = s.expires?.let { Ui.dateFull(it) } ?: getString(R.string.unlimited)
         b.accSub.text = "${s.status} · ${getString(R.string.expires)}: $exp" +
             (if (s.extra.isNotEmpty()) " · ${s.extra}" else "")
-        renderTiles()
-        renderRails()
-        Ui.autoSpan(b.tiles, 200)
     }
 
-    private fun renderTiles() {
-        tiles.setData(
-            listOf(
-                TileRow(android.R.drawable.ic_media_play, getString(R.string.live_tv), if (liveCount >= 0) getString(R.string.channels_d, liveCount) else ""),
-                TileRow(android.R.drawable.ic_menu_gallery, getString(R.string.movies)),
-                TileRow(android.R.drawable.ic_menu_slideshow, getString(R.string.series)),
-                TileRow(android.R.drawable.ic_menu_agenda, getString(R.string.guide))
+    private fun ratingOf(r: String): Double = r.toDoubleOrNull() ?: -1.0
+
+    private suspend fun loadDiscovery() {
+        val p = Repository.provider ?: return
+        val live = try { p.live(null) } catch (e: Exception) { emptyList() }
+        val vod = try { p.vod(null) } catch (e: Exception) { emptyList() }
+        val series = try { p.series(null) } catch (e: Exception) { emptyList() }
+        Repository.lastLive = live
+        liveList = live.take(15)
+        vodList = vod.sortedByDescending { it.added }.take(15)
+        seriesList = series.sortedByDescending { it.added }.take(15)
+        paintHero(vod, series, live)
+        val bb = b ?: return
+        railL.submitList(liveList)
+        railT.submitList(vodList.map { v ->
+            PosterRow(
+                "movie:${v.id}", v.poster, v.name,
+                listOf(v.year, if (v.rating.isNotEmpty()) "★ ${v.rating}" else "")
+                    .filter { it.isNotEmpty() }.joinToString(" · ")
             )
-        )
+        })
+        railS.submitList(seriesList.map { s ->
+            PosterRow(
+                "series:${s.id}", s.poster, s.name,
+                listOf(s.year, if (s.rating.isNotEmpty()) "★ ${s.rating}" else "")
+                    .filter { it.isNotEmpty() }.joinToString(" · ")
+            )
+        })
+        bb.lblLiveNow.visibility = if (liveList.isNotEmpty()) View.VISIBLE else View.GONE
+        bb.railLiveNow.visibility = if (liveList.isEmpty()) View.GONE else View.VISIBLE
+        bb.lblTrending.visibility = if (vodList.isNotEmpty()) View.VISIBLE else View.GONE
+        bb.railTrending.visibility = if (vodList.isEmpty()) View.GONE else View.VISIBLE
+        bb.lblSeries.visibility = if (seriesList.isNotEmpty()) View.VISIBLE else View.GONE
+        bb.railSeries.visibility = if (seriesList.isEmpty()) View.GONE else View.VISIBLE
+    }
+
+    private fun paintHero(vod: List<VodItem>, series: List<SeriesItem>, live: List<LiveCh>) {
+        val b = b ?: return
+        val topSeries = series.filter { it.backdrop.isNotEmpty() || it.poster.isNotEmpty() }
+            .maxByOrNull { ratingOf(it.rating) }
+        val topVod = vod.filter { it.poster.isNotEmpty() }.maxByOrNull { ratingOf(it.rating) }
+        if (topSeries != null && (topVod == null || ratingOf(topSeries.rating) >= ratingOf(topVod.rating))) {
+            heroKind = "series"
+            heroSeries = topSeries
+            Images.load(b.heroBg, topSeries.backdrop.ifEmpty { topSeries.poster }, Images.Kind.BACKDROP)
+            b.heroCat.text = getString(R.string.series).uppercase(Locale.getDefault())
+            b.heroTitle.text = topSeries.name
+            b.heroMeta.text = listOf(
+                if (topSeries.rating.isNotEmpty()) "★ ${topSeries.rating}" else "",
+                topSeries.year, topSeries.genre
+            ).filter { it.isNotEmpty() }.joinToString(" · ")
+            b.heroPlot.text = topSeries.plot
+            b.heroPlot.visibility = if (topSeries.plot.isEmpty()) View.GONE else View.VISIBLE
+        } else if (topVod != null) {
+            heroKind = "movie"
+            heroVod = topVod
+            Images.load(b.heroBg, topVod.poster, Images.Kind.BACKDROP)
+            b.heroCat.text = getString(R.string.movies).uppercase(Locale.getDefault())
+            b.heroTitle.text = topVod.name
+            b.heroMeta.text = listOf(
+                if (topVod.rating.isNotEmpty()) "★ ${topVod.rating}" else "",
+                topVod.year, topVod.genre
+            ).filter { it.isNotEmpty() }.joinToString(" · ")
+            b.heroPlot.text = topVod.plot
+            b.heroPlot.visibility = if (topVod.plot.isEmpty()) View.GONE else View.VISIBLE
+        } else if (live.isNotEmpty()) {
+            val ch = live.first()
+            heroKind = "live"
+            heroLive = ch
+            Images.load(b.heroBg, ch.logo, Images.Kind.BACKDROP)
+            b.heroCat.text = getString(R.string.live_tv).uppercase(Locale.getDefault())
+            b.heroTitle.text = ch.name
+            b.heroMeta.text = "● ${getString(R.string.live_now)}"
+            b.heroPlot.visibility = View.GONE
+        } else {
+            heroKind = ""
+            b.heroTitle.text = "RGBTv"
+            b.heroMeta.text = ""
+            b.heroPlot.visibility = View.GONE
+        }
+        paintHeroFav()
+    }
+
+    private fun heroWatch() {
+        val a = acc() ?: return
+        when (heroKind) {
+            "movie" -> {
+                val v = heroVod ?: return
+                Guard.run(this, a.id, "movie", v.id, v.name) {
+                    val pos = Store.getPos(a.id, "movie:${v.id}")
+                    PlayerActivity.playVod(requireContext(), v, null, pos?.pos ?: 0)
+                }
+            }
+            "series" -> {
+                val s = heroSeries ?: return
+                Guard.run(this, a.id, "series", s.id, s.name) {
+                    main().open(DetailFragment.forItem("series", s.toJson().toString()))
+                }
+            }
+            "live" -> {
+                val ch = heroLive ?: return
+                Guard.run(this, a.id, "live", ch.id, ch.name) {
+                    PlayerActivity.playLive(requireContext(), ch, Repository.lastLive)
+                }
+            }
+        }
+    }
+
+    private fun heroFav() {
+        val a = acc() ?: return
+        val item = when (heroKind) {
+            "movie" -> {
+                val v = heroVod ?: return
+                FavItem("movie", v.id, v.name, v.poster, v.toJson().toString())
+            }
+            "series" -> {
+                val s = heroSeries ?: return
+                FavItem("series", s.id, s.name, s.poster, s.toJson().toString())
+            }
+            "live" -> {
+                val ch = heroLive ?: return
+                FavItem("live", ch.id, ch.name, ch.logo, ch.toJson().toString())
+            }
+            else -> return
+        }
+        Guard.run(this, a.id, item.type, item.id, item.name) {
+            val now = Store.toggleFav(a.id, item)
+            Ui.toast(context, getString(if (now) R.string.added_fav else R.string.removed_fav))
+            paintHeroFav()
+            renderRails()
+        }
+    }
+
+    private fun paintHeroFav() {
+        val b = b ?: return
+        val a = acc() ?: return
+        val fav = when (heroKind) {
+            "movie" -> heroVod?.let { Store.isFav(a.id, "movie", it.id) } ?: false
+            "series" -> heroSeries?.let { Store.isFav(a.id, "series", it.id) } ?: false
+            "live" -> heroLive?.let { Store.isFav(a.id, "live", it.id) } ?: false
+            else -> false
+        }
+        b.btnHeroFav.text = (if (fav) "★ " else "＋ ") + getString(R.string.my_list)
     }
 
     private fun posKey(type: String, id: String) = when (type) {
@@ -165,18 +315,29 @@ class HomeFragment : Fragment() {
         b.railFavs.visibility = if (showF) View.VISIBLE else View.GONE
     }
 
-    private fun openTile(i: Int) {
-        when (i) {
-            0 -> main().open(BrowseFragment.forMode(BrowseFragment.MODE_LIVE))
-            1 -> main().open(BrowseFragment.forMode(BrowseFragment.MODE_VOD))
-            2 -> main().open(BrowseFragment.forMode(BrowseFragment.MODE_SERIES))
-            3 -> main().open(GuideFragment())
-        }
-    }
-
     private fun guarded(type: String, id: String, name: String, action: () -> Unit) {
         val a = acc() ?: return action()
         Guard.run(this, a.id, type, id, name, action)
+    }
+
+    private fun openLive(ch: LiveCh) {
+        guarded("live", ch.id, ch.name) {
+            PlayerActivity.playLive(requireContext(), ch, Repository.lastLive)
+        }
+    }
+
+    private fun openVod(i: Int) {
+        val v = vodList.getOrNull(i) ?: return
+        guarded("movie", v.id, v.name) {
+            main().open(DetailFragment.forItem("movie", v.toJson().toString()))
+        }
+    }
+
+    private fun openSeries(i: Int) {
+        val s = seriesList.getOrNull(i) ?: return
+        guarded("series", s.id, s.name) {
+            main().open(DetailFragment.forItem("series", s.toJson().toString()))
+        }
     }
 
     private fun openHist(i: Int) {
@@ -241,6 +402,8 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         ui.removeCallbacks(clockTick)
+        pulse?.cancel()
+        pulse = null
         b = null
         super.onDestroyView()
     }
